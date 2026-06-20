@@ -1,0 +1,687 @@
+@import "tailwindcss";
+
+/* ── Theme variables ─────────────────────────────────────────────── */
+:root,
+[data-theme="dark"] {
+  --bg-base:        #050816;
+  --bg-surface:     #0f0f23;
+  --bg-card:        rgba(255, 255, 255, 0.03);
+  --bg-nav:         rgba(5, 8, 22, 0.90);
+  --bg-nav-solid:   rgba(5, 8, 22, 0.98);
+  --bg-mobile-menu: rgba(5, 8, 22, 0.97);
+  --border-subtle:  rgba(255, 255, 255, 0.07);
+  --border-accent:  rgba(59, 130, 246, 0.30);
+  --text-primary:   #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted:     #475569;
+  --text-faint:     #334155;
+  --scrollbar-track: #0f0f23;
+  --scrollbar-thumb: #3B82F6;
+  --grid-line:      rgba(59, 130, 246, 0.06);
+  --radial-glow:    rgba(59, 130, 246, 0.25);
+  --noise-opacity:  0.03;
+  --glass-bg:       rgba(255, 255, 255, 0.03);
+  --glass-border:   rgba(255, 255, 255, 0.07);
+  --tag-bg:         rgba(59, 130, 246, 0.12);
+  --tag-border:     rgba(59, 130, 246, 0.30);
+  --tag-bg-hover:   rgba(59, 130, 246, 0.25);
+  --tag-border-hover: rgba(59, 130, 246, 0.60);
+  --term-added-label:        rgba(148, 163, 184, 0.55);
+  --term-added-value:        rgba(226, 232, 240, 0.90);
+  --term-added-badge-bg:     rgba(255, 255, 255, 0.06);
+  --term-added-badge-border: rgba(255, 255, 255, 0.10);  
+  --section-num-color: rgba(59, 130, 246, 0.30);
+  --footer-stack-bg: rgba(255,255,255,0.05);
+  --footer-stack-border: rgba(255,255,255,0.08);
+}
+
+[data-theme="light"] {
+  --bg-base:        #f0f4ff;
+  --bg-surface:     #e8edf8;
+  --bg-card:        rgba(255, 255, 255, 0.80);
+  --bg-nav:         rgba(240, 244, 255, 0.88);
+  --bg-nav-solid:   rgba(240, 244, 255, 0.98);
+  --bg-mobile-menu: rgba(240, 244, 255, 0.98);
+  --border-subtle:  rgba(0, 0, 0, 0.07);
+  --border-accent:  rgba(59, 130, 246, 0.35);
+  --text-primary:   #0f172a;
+  --text-secondary: #334155;
+  --text-muted:     #64748b;
+  --text-faint:     #94a3b8;
+  --scrollbar-track: #e2e8f0;
+  --scrollbar-thumb: #3B82F6;
+  --grid-line:      rgba(59, 130, 246, 0.08);
+  --radial-glow:    rgba(59, 130, 246, 0.12);
+  --noise-opacity:  0.015;
+  --glass-bg:       rgba(255, 255, 255, 0.70);
+  --glass-border:   rgba(0, 0, 0, 0.08);
+  --tag-bg:         rgba(59, 130, 246, 0.10);
+  --tag-border:     rgba(59, 130, 246, 0.25);
+  --tag-bg-hover:   rgba(59, 130, 246, 0.20);
+  --tag-border-hover: rgba(59, 130, 246, 0.55);
+  --term-added-label:        #6b7280;
+  --term-added-value:        #1e1b4b;
+  --term-added-badge-bg:     rgba(99, 102, 241, 0.08);
+  --term-added-badge-border: rgba(99, 102, 241, 0.20);  
+  --section-num-color: rgba(59, 130, 246, 0.18);
+  --footer-stack-bg: rgba(0,0,0,0.04);
+  --footer-stack-border: rgba(0,0,0,0.08);
+}
+
+/* ── Base styles ─────────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+/* ── Custom scrollbar ────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: #60A5FA; }
+
+/* ── Noise texture overlay ───────────────────────────────────────── */
+.noise::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ── Glow text ───────────────────────────────────────────────────── */
+.glow-text {
+  text-shadow: 0 0 40px rgba(59, 130, 246, 0.6), 0 0 80px rgba(59, 130, 246, 0.3);
+}
+.glow-text-cyan {
+  text-shadow: 0 0 40px rgba(96, 165, 250, 0.6), 0 0 80px rgba(96, 165, 250, 0.3);
+}
+[data-theme="light"] .glow-text,
+[data-theme="light"] .glow-text-cyan {
+  text-shadow: 0 0 24px rgba(59, 130, 246, 0.4);
+}
+
+/* ── Animated gradient border ────────────────────────────────────── */
+@keyframes border-rotate {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.gradient-border {
+  position: relative;
+  background: linear-gradient(var(--bg-base), var(--bg-base)) padding-box,
+              linear-gradient(135deg, #3B82F6, #60A5FA, #A78BFA, #3B82F6) border-box;
+  border: 2px solid transparent;
+}
+
+/* ── Floating animation ──────────────────────────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-12px); }
+}
+.float-anim { animation: float 4s ease-in-out infinite; }
+
+/* ── Pulse ring ──────────────────────────────────────────────────── */
+@keyframes pulse-ring {
+  0%   { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+.pulse-ring::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 9999px;
+  border: 2px solid #3B82F6;
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+/* ── Shimmer animation ───────────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2.5s infinite;
+}
+
+/* ── Typewriter cursor ───────────────────────────────────────────── */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+.cursor-blink { animation: blink 1s step-end infinite; }
+
+/* ── Skill bar fill ──────────────────────────────────────────────── */
+@keyframes fill-bar {
+  from { width: 0%; }
+  to   { width: var(--target-width); }
+}
+.skill-bar-fill { animation: fill-bar 1.5s ease-out forwards; }
+
+/* ── Card hover glow ─────────────────────────────────────────────── */
+.card-glow:hover {
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.25), 0 0 60px rgba(59, 130, 246, 0.1);
+}
+
+/* ── Grid background ─────────────────────────────────────────────── */
+.bg-grid {
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ── Radial glow ─────────────────────────────────────────────────── */
+.radial-glow {
+  background: radial-gradient(ellipse 80% 60% at 50% -20%, var(--radial-glow), transparent);
+}
+
+/* ── Tag chip ────────────────────────────────────────────────────── */
+.tag-chip {
+  background: var(--tag-bg);
+  border: 1px solid var(--tag-border);
+  transition: all 0.2s ease;
+}
+.tag-chip:hover {
+  background: var(--tag-bg-hover);
+  border-color: var(--tag-border-hover);
+}
+
+/* ── Section number ──────────────────────────────────────────────── */
+.section-number {
+  font-family: 'Space Grotesk', monospace;
+  color: var(--section-num-color);
+  font-size: 7rem;
+  font-weight: 900;
+  line-height: 1;
+  position: absolute;
+  top: -1rem;
+  left: -1rem;
+  z-index: 0;
+  user-select: none;
+}
+
+/* ── Timeline line ───────────────────────────────────────────────── */
+.timeline-line::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, #3B82F6, #60A5FA, transparent);
+}
+
+/* ── Glassmorphism card ──────────────────────────────────────────── */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  transition: background 0.35s ease, border-color 0.35s ease;
+}
+
+/* ── Gradient text ───────────────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, #60A5FA, #A78BFA);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ── Hover lift ──────────────────────────────────────────────────── */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
+}
+
+/* ── Neon border ─────────────────────────────────────────────────── */
+.neon-border {
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.3), inset 0 0 0 1px rgba(59, 130, 246, 0.1);
+}
+
+/* ── Rotating gradient ───────────────────────────────────────────── */
+@keyframes rotate-gradient {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.rotating-border { position: relative; overflow: hidden; }
+.rotating-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: conic-gradient(from 0deg, #3B82F6, #60A5FA, #A78BFA, #3B82F6);
+  animation: rotate-gradient 4s linear infinite;
+  z-index: -1;
+}
+
+/* ── Theme toggle button ─────────────────────────────────────────── */
+.theme-toggle {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  border-radius: 9999px;
+  border: 1.5px solid rgba(59, 130, 246, 0.4);
+  background: rgba(59, 130, 246, 0.12);
+  cursor: pointer;
+  transition: background 0.3s ease, border-color 0.3s ease;
+  flex-shrink: 0;
+}
+.theme-toggle:hover {
+  border-color: rgba(59, 130, 246, 0.7);
+  background: rgba(59, 130, 246, 0.2);
+}
+.theme-toggle-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  background: #3B82F6;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+[data-theme="light"] .theme-toggle-knob {
+  transform: translateX(20px);
+  background: #f59e0b;
+}
+
+/* ── Mobile hamburger menu improvements ──────────────────────────── */
+.hamburger-btn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--border-subtle);
+  background: var(--bg-card);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.hamburger-btn:hover {
+  border-color: rgba(59, 130, 246, 0.5);
+  background: rgba(59, 130, 246, 0.1);
+}
+.hamburger-btn.is-open {
+  border-color: rgba(59, 130, 246, 0.5);
+  background: rgba(59, 130, 246, 0.12);
+}
+
+/* ── Mobile menu overlay ─────────────────────────────────────────── */
+.mobile-menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 35;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+}
+[data-theme="light"] .mobile-menu-overlay {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+/* ── Mobile menu panel ───────────────────────────────────────────── */
+.mobile-menu-panel {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  background: var(--bg-mobile-menu);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-accent);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+[data-theme="light"] .mobile-menu-panel {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* ── Mobile nav item ─────────────────────────────────────────────── */
+.mobile-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 16px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: left;
+}
+.mobile-nav-item:hover {
+  color: var(--text-primary);
+  background: var(--bg-card);
+  border-color: var(--border-subtle);
+}
+.mobile-nav-item.active {
+  color: #60A5FA;
+  background: rgba(59, 130, 246, 0.10);
+  border-color: rgba(59, 130, 246, 0.30);
+}
+.mobile-nav-item .nav-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+.mobile-nav-item.active .nav-icon {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.35);
+}
+.mobile-nav-item .nav-chevron {
+  margin-left: auto;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: all 0.2s ease;
+}
+.mobile-nav-item:hover .nav-chevron,
+.mobile-nav-item.active .nav-chevron {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TERMINAL SKILLS v3 — Day/Night aware
+═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Variables dark (default) ───────────────────────────────────────────── */
+:root,
+[data-theme="dark"] {
+  --term-card-bg:          #0d0d14;
+  --term-card-border:      rgba(255, 255, 255, 0.07);
+  --term-card-shadow:      0 0 0 1px rgba(255,255,255,0.03) inset,
+                           0 6px 32px rgba(0,0,0,0.55),
+                           0 1px 0   rgba(255,255,255,0.04) inset;
+  --term-card-shadow-h:    0 0 0 1px rgba(255,255,255,0.05) inset,
+                           0 8px 40px rgba(0,0,0,0.65),
+                           0 0 32px rgba(74,222,128,0.04);
+  --term-titlebar-bg:      #15151f;
+  --term-titlebar-border:  rgba(255, 255, 255, 0.06);
+  --term-path-color:       #475569;
+  --term-banner-init:      #374151;
+  --term-separator:        rgba(255, 255, 255, 0.06);
+  --term-prompt:           #f472b6;   /* pink-400  */
+  --term-cmd-color:        #94a3b8;   /* slate-400 */
+  --term-cursor-bg:        #64748b;   /* slate-500 */
+  --term-check-color:      #4ade80;   /* green-400 */
+  --term-row-bg:           rgba(255, 255, 255, 0.025);
+  --term-row-hover-bg:     rgba(255, 255, 255, 0.05);
+  --term-desc-color:       #64748b;
+  --term-desc-font:        font-mono; /* unused — set via class */
+  --term-scan-line:        rgba(0, 0, 0, 0.06);
+  --term-sweep-color:      rgba(74, 222, 128, 0.042);
+  --term-global-scan:      rgba(0, 0, 0, 0.03);
+  --term-icon-grayscale:   grayscale(1) opacity(0.55);
+  --term-icon-grayscale-h: grayscale(0) opacity(1);
+  --term-icon-inv:         brightness(0) invert(1) opacity(0.4);
+  --term-icon-inv-h:       brightness(0) invert(1) opacity(0.95);
+  --term-icon-node-op:     0.5;
+  --term-added-in-op:      80;        /* hex suffix for accent */
+  --term-added-val-op:     bb;
+}
+
+/* ── Variables light — "day console" ────────────────────────────────────── */
+[data-theme="light"] {
+  --term-card-bg:          #ffffff;
+  --term-card-border:      rgba(99, 102, 241, 0.18);   /* indigo sutil */
+  --term-card-shadow:      0 0 0 1px rgba(99,102,241,0.08) inset,
+                           0 4px 24px rgba(99,102,241,0.10),
+                           0 1px 0   rgba(255,255,255,0.9) inset;
+  --term-card-shadow-h:    0 0 0 1px rgba(99,102,241,0.15) inset,
+                           0 8px 32px rgba(99,102,241,0.18),
+                           0 0 0 3px rgba(99,102,241,0.06);
+  --term-titlebar-bg:      #f8f9ff;   /* blanco-lavanda */
+  --term-titlebar-border:  rgba(99, 102, 241, 0.12);
+  --term-path-color:       #6b7280;   /* gray-500 */
+  --term-banner-init:      #9ca3af;   /* gray-400 — comentario de consola */
+  --term-separator:        rgba(99, 102, 241, 0.10);
+  --term-prompt:           #7c3aed;   /* violet-700 — > prompt visible */
+  --term-cmd-color:        #1e1b4b;   /* indigo-950 — texto negro-índigo */
+  --term-cursor-bg:        #6366f1;   /* indigo-500 */
+  --term-check-color:      #16a34a;   /* green-700 */
+  --term-row-bg:           rgba(99, 102, 241, 0.04);
+  --term-row-hover-bg:     rgba(99, 102, 241, 0.09);
+  --term-desc-color:       #374151;   /* gray-700 — legible sobre blanco */
+  --term-scan-line:        transparent; /* sin scanlines en day mode */
+  --term-sweep-color:      transparent; /* sin sweep en day mode     */
+  --term-global-scan:      transparent;
+  --term-icon-grayscale:   grayscale(0) opacity(0.85);   /* color desde inicio */
+  --term-icon-grayscale-h: grayscale(0) opacity(1);
+  --term-icon-inv:         brightness(0) opacity(0.65);  /* oscuro sobre blanco */
+  --term-icon-inv-h:       brightness(0) opacity(0.90);
+  --term-icon-node-op:     0.7;
+  --term-added-in-op:      55;
+  --term-added-val-op:     99;
+}
+
+/* ── 1. Blink ────────────────────────────────────────────────────────────── */
+@keyframes term-blink {
+  0%, 49%   { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.term-blink {
+  display: inline-block;
+  animation: term-blink 1s step-end infinite;
+  user-select: none;
+}
+
+/* ── 2. Check glow (solo dark) ───────────────────────────────────────────── */
+.term-glow-green {
+  text-shadow:
+    0 0  6px rgba(74, 222, 128, 0.80),
+    0 0 14px rgba(74, 222, 128, 0.35);
+}
+[data-theme="light"] .term-glow-green {
+  text-shadow: 0 0 8px rgba(22, 163, 74, 0.40);
+}
+
+/* ── 3. Card ─────────────────────────────────────────────────────────────── */
+.term-card {
+  background:  var(--term-card-bg);
+  border: 1px solid var(--term-card-border);
+  box-shadow: var(--term-card-shadow);
+  transition: box-shadow 0.3s, border-color 0.3s;
+}
+.term-card:hover {
+  box-shadow: var(--term-card-shadow-h);
+}
+
+/* light: borde indigo más visible en hover */
+[data-theme="light"] .term-card:hover {
+  border-color: rgba(99, 102, 241, 0.35);
+}
+
+.term-titlebar {
+  background:  var(--term-titlebar-bg);
+  border-color: var(--term-titlebar-border);
+}
+.term-body { background: transparent; }
+
+/* ── 4. Dot-grid background para la sección en light ────────────────────── */
+/*
+   Se aplica directamente sobre la <section> en light mode.
+   En dark mantenemos el fondo plano oscuro.
+*/
+[data-theme="light"] #skills {
+  background-image: radial-gradient(
+    circle,
+    rgba(99, 102, 241, 0.18) 1px,
+    transparent               1px
+  ) !important;
+  background-size: 22px 22px !important;
+  background-color: #f0f4ff !important;
+}
+
+/* ── 5. Scanlines ────────────────────────────────────────────────────────── */
+.term-scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent              0px,
+    transparent              2px,
+    var(--term-scan-line)    2px,
+    var(--term-scan-line)    3px
+  );
+  opacity: 0.9;
+}
+/* En light las variables ya apuntan a transparent,
+   pero desactivamos la opacidad también por si acaso */
+[data-theme="light"] .term-scanlines { display: none; }
+
+/* ── 6. Sweep ────────────────────────────────────────────────────────────── */
+@keyframes term-sweep {
+  0%   { top: -8%;  opacity: 0;   }
+  5%   {            opacity: 0.9; }
+  92%  {            opacity: 0.5; }
+  100% { top: 106%; opacity: 0;   }
+}
+.term-sweep {
+  position: absolute;
+  left: 0; right: 0;
+  height: 40px;
+  pointer-events: none;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    transparent              0%,
+    var(--term-sweep-color)  35%,
+    var(--term-sweep-color)  65%,
+    transparent              100%
+  );
+  animation: term-sweep 9s linear infinite;
+}
+[data-theme="light"] .term-sweep { display: none; }
+.term-card:nth-child(2) .term-sweep { animation-delay: -3s; }
+.term-card:nth-child(3) .term-sweep { animation-delay: -6s; }
+
+/* ── 7. Global scanlines de sección ─────────────────────────────────────── */
+.global-scanlines {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent             0px,
+    transparent             3px,
+    var(--term-global-scan) 3px,
+    var(--term-global-scan) 4px
+  );
+}
+[data-theme="light"] .global-scanlines { display: none; }
+
+/* ── 8. Skill row ────────────────────────────────────────────────────────── */
+.skill-row {
+  cursor: default;
+  transition: background 0.2s, border-left-color 0.2s;
+}
+.skill-row:hover {
+  background: var(--term-row-hover-bg) !important;
+}
+
+/* ── 9. Iconos ───────────────────────────────────────────────────────────── */
+.skill-icon-img {
+  filter: var(--term-icon-grayscale);
+  transition: filter 0.25s ease;
+}
+.skill-row:hover .skill-icon-img {
+  filter: var(--term-icon-grayscale-h);
+}
+
+.skill-icon-inv {
+  filter: var(--term-icon-inv);
+}
+.skill-row:hover .skill-icon-inv {
+  filter: var(--term-icon-inv-h);
+}
+
+.skill-icon-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: var(--term-icon-node-op);
+  transition: opacity 0.25s;
+}
+.skill-row:hover .skill-icon-node { opacity: 1; }
+
+/* ── 10. Glitch (solo dark — en light se deshabilita) ───────────────────── */
+@keyframes term-glitch {
+  0%   { transform: translate(0);           filter: none; }
+  12%  { transform: translate(-2px,  1px);  filter: drop-shadow( 2px 0 #22d3ee)
+                                                     drop-shadow(-1px 0 #f87171); }
+  25%  { transform: translate( 2px, -1px);  filter: drop-shadow(-2px 0 #f87171); }
+  37%  { transform: translate(-1px,  2px);  filter: drop-shadow( 1px 0 #a78bfa)
+                                                     brightness(1.12); }
+  50%  { transform: translate( 1px, -2px);  filter: drop-shadow(-1px 0 #22d3ee); }
+  62%  { transform: translate(-2px,  0px);  filter: drop-shadow( 2px 0 #f87171)
+                                                     hue-rotate(25deg); }
+  75%  { transform: translate( 2px,  1px);  filter: drop-shadow(-2px 0 #a78bfa); }
+  87%  { transform: translate(-1px, -1px);  filter: drop-shadow( 1px 0 #22d3ee)
+                                                     brightness(1.08); }
+  100% { transform: translate(0);           filter: none; }
+}
+
+[data-theme="dark"] .skill-row:hover .skill-glitch-icon *,
+[data-theme="dark"] .skill-row:hover .skill-glitch-icon img,
+[data-theme="dark"] .skill-row:hover .skill-glitch-icon svg {
+  animation: term-glitch 0.55s linear infinite;
+}
+
+/* light: micro-elevación del icono en hover (sin glitch) */
+[data-theme="light"] .skill-glitch-icon {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+[data-theme="light"] .skill-row:hover .skill-glitch-icon {
+  transform: translateY(-1px) scale(1.08);
+  box-shadow: 0 3px 10px rgba(99, 102, 241, 0.20);
+}
+
+/* ── 11. Reduced motion ──────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .term-blink,
+  .term-sweep                             { animation: none; opacity: 0; }
+  .term-blink                             { opacity: 1; }
+  [data-theme="dark"] .skill-row:hover .skill-glitch-icon *,
+  [data-theme="dark"] .skill-row:hover .skill-glitch-icon img,
+  [data-theme="dark"] .skill-row:hover .skill-glitch-icon svg { animation: none; }
+}
+
+/* ── 12. Ambient glows — más tenues en light ─────────────────────────────── */
+[data-theme="light"] #skills .absolute.bg-cyan-500\/\[0\.03\] {
+  opacity: 0.6;
+}
+[data-theme="light"] #skills .absolute.bg-purple-500\/\[0\.04\] {
+  opacity: 0.5;
+}
