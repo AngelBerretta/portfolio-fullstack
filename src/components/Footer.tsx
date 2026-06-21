@@ -1,4 +1,5 @@
 "use client";
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Code2, Heart } from 'lucide-react';
 
@@ -30,7 +31,15 @@ export default function Footer() {
             <Heart size={11} className="text-rose-500 fill-rose-500" />
             {' '}por{' '}
             <span className="font-medium" style={{ color: 'var(--text-secondary)' }}>Angel Berretta</span>
-            {' '}·{' '}
+            {' '}
+            <Link
+              href="/admin/login"
+              className="hover:text-blue-400 transition-colors"
+              aria-label="Panel de administración"
+            >
+              ·
+            </Link>
+            {' '}
             <span style={{ color: 'var(--text-muted)' }}>{year}</span>
           </p>
 
