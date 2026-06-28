@@ -11,18 +11,17 @@ const roles = [
   'Freelance Developer',
 ];
 
-// Componente de la bandera argentina en SVG
 const ArgentinaFlag = () => (
-  <svg 
-    viewBox="0 0 27 18" 
+  <svg
+    viewBox="0 0 27 18"
     className="inline-block w-5 h-4 align-middle mx-1"
     aria-label="Bandera de Argentina"
     role="img"
   >
-    <rect width="27" height="6" fill="#74ACDF"/>
-    <rect y="6" width="27" height="6" fill="#FFFFFF"/>
-    <rect y="12" width="27" height="6" fill="#74ACDF"/>
-    <circle cx="13.5" cy="9" r="3.5" fill="#F6B40E"/>
+    <rect width="27" height="6" fill="#74ACDF" />
+    <rect y="6" width="27" height="6" fill="#FFFFFF" />
+    <rect y="12" width="27" height="6" fill="#74ACDF" />
+    <circle cx="13.5" cy="9" r="3.5" fill="#F6B40E" />
   </svg>
 );
 
@@ -42,8 +41,11 @@ export default function Hero() {
   const typedText = useTypewriter(roles);
 
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-grid">
-      {/* Glow orbs — todo azul, sin violeta */}
+    <section
+      id="hero"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-grid"
+    >
+      {/* Glow orbs */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-sky-500/20 rounded-full blur-3xl" />
@@ -53,19 +55,8 @@ export default function Hero() {
       <HeroParticles />
 
       <div className="relative z-10 max-w-6xl mx-auto px-6 py-28 flex flex-col items-center text-center">
-        {/* Status badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-8 inline-flex items-center gap-2 px-5 py-2 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-300 text-sm font-medium"
-        >
-          <Sparkles size={14} className="text-yellow-400" />
-          Disponible para trabajar
-          <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-        </motion.div>
 
-        {/* Name — gradiente azul → sky, sin violeta */}
+        {/* Name */}
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -96,7 +87,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="max-w-2xl text-base md:text-lg leading-relaxed mb-10 [color:var(--text-secondary)]"
+          className="max-w-2xl text-base md:text-lg leading-relaxed mb-8 [color:var(--text-secondary)]"
         >
           Desarrollador Web Full Stack en continua formación{' '}
           <br className="hidden sm:block" />
@@ -108,7 +99,23 @@ export default function Hero() {
           </span>
         </motion.p>
 
-        {/* CTA Buttons — gradiente azul → cyan */}
+        {/* Status badge */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.45 }}
+          className="mb-8 inline-flex items-center gap-2 px-5 py-2 rounded-full 
+                    bg-green-500/10 dark:bg-green-500/10 
+                    border border-green-600/40 dark:border-green-500/30 
+                    text-green-700 dark:text-green-300 
+                    text-sm font-medium"
+        >
+          <span className="w-2 h-2 rounded-full bg-green-500 dark:bg-green-400 animate-pulse" />
+          Disponible para trabajar
+          {/* <Sparkles size={14} className="text-yellow-500 dark:text-yellow-400" /> */}
+        </motion.div>
+
+        {/* CTA Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -116,13 +123,17 @@ export default function Hero() {
           className="flex flex-wrap gap-4 justify-center mb-12"
         >
           <button
-            onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() =>
+              document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })
+            }
             className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold shadow-lg shadow-blue-500/30 hover:shadow-blue-500/60 hover:scale-105 transition-all duration-300"
           >
             Ver Proyectos
           </button>
           <button
-            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() =>
+              document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+            }
             className="px-8 py-3.5 rounded-xl border border-blue-500/40 font-semibold hover:border-blue-500/80 hover:bg-blue-500/10 transition-all duration-300 [color:var(--text-primary)]"
           >
             Contactame
@@ -186,7 +197,9 @@ export default function Hero() {
               <div className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-sky-400 mb-1">
                 {stat.number}
               </div>
-              <div className="text-xs md:text-sm font-medium [color:var(--text-muted)]">{stat.label}</div>
+              <div className="text-xs md:text-sm font-medium [color:var(--text-muted)]">
+                {stat.label}
+              </div>
             </div>
           ))}
         </motion.div>
@@ -199,7 +212,9 @@ export default function Hero() {
         transition={{ delay: 1.5 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer hover:text-blue-400 transition-colors"
         style={{ color: 'var(--text-faint)' }}
-        onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
+        onClick={() =>
+          document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })
+        }
       >
         <span className="text-[10px] font-semibold tracking-[0.3em] uppercase">Scroll</span>
         <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>

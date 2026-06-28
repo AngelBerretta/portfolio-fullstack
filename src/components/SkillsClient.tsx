@@ -61,7 +61,7 @@ function SkillLine({
   skill: TSkill; index: number; go: boolean; hex: string;
 }) {
   const [showResult, setShowResult] = useState(false);
-  const { out, done } = useTypewriter(`npm install ${skill.pkg}`, index * 680, go);
+  const { out, done } = useTypewriter(`npm install ${skill.pkg}`, index * 280, go);
 
   useEffect(() => {
     if (!done) return;
