@@ -10,7 +10,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@emailjs/browser": "^4.4.1",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "@vercel/blob": "^2.4.1",
@@ -25,6 +24,7 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-intersection-observer": "^10.0.3",
+    "resend": "^4.0.1",
     "tailwind-merge": "^3.6.0",
     "zod": "^4.4.3"
   },

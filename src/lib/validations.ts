@@ -157,6 +157,33 @@ export const TagSchema = z.object({
 
 // ─── Reorder ─────────────────────────────────────────────────────────────────
 
+// ─── Contacto (formulario público) ──────────────────────────────────────────
+// El honeypot ("company") se chequea aparte en el action, antes de llegar
+// a este schema, así que no forma parte de los campos validados acá.
+
+export const ContactSchema = z.object({
+  name: z
+    .string({ error: 'El nombre es requerido' })
+    .min(1, 'El nombre es requerido')
+    .max(80, 'Máximo 80 caracteres'),
+
+  email: z
+    .string({ error: 'El email es requerido' })
+    .min(1, 'El email es requerido')
+    .email('Ingresá un email válido'),
+
+  subject: z.string().max(150, 'Máximo 150 caracteres').optional(),
+
+  message: z
+    .string({ error: 'El mensaje es requerido' })
+    .min(1, 'El mensaje es requerido')
+    .max(2000, 'Máximo 2000 caracteres'),
+});
+
+export type ContactInput = z.infer<typeof ContactSchema>;
+
+// ─── Reorder ─────────────────────────────────────────────────────────────────
+
 export const ReorderSchema = z.array(
   z.object({
     id: z.string().cuid(),
