@@ -1,3 +1,4 @@
+// Contact.tsx — sin cambios de fondo, solo items-start de vuelta
 "use client";
 
 import { useRef } from 'react';
@@ -36,6 +37,7 @@ export default function Contact() {
           <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-violet-400 rounded-full mx-auto mt-5" />
         </motion.div>
 
+        {/* ── items-start: cada columna toma su altura natural ── */}
         <div className="grid lg:grid-cols-2 gap-10 items-start">
           <ContactInfo isInView={isInView} />
           <ContactForm isInView={isInView} />
