@@ -1,18 +1,10 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { Network, MonitorSmartphone, Palette, Terminal, Code2 } from 'lucide-react';
+import { Terminal, ChevronRight, Code2, Network, MonitorSmartphone, Palette } from 'lucide-react';
 
-// Registro de íconos Lucide disponibles como fallback (cuando la skill no
-// tiene iconUrl). Si agregás una skill nueva con un iconName distinto acá,
-// agregalo también a este mapa y a AVAILABLE_FALLBACK_ICONS en lib/constants.ts.
-const FALLBACK_ICONS: Record<string, React.ComponentType<{ size?: number }>> = {
-  Network,
-  MonitorSmartphone,
-  Palette,
-};
-
+/* ── Tipos ────────────────────────────────────────────────────────────────── */
 export interface TSkill {
   pkg: string;
   desc: string;
@@ -29,156 +21,39 @@ export interface TCategory {
   list: TSkill[];
 }
 
-/* ── Typewriter hook ──────────────────────────────────────────────────────── */
-function useTypewriter(text: string, startDelay: number, go: boolean) {
-  const [out, setOut] = useState('');
-  const [done, setDone] = useState(false);
-  const tmr = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+// Registro de íconos Lucide disponibles como fallback (cuando la skill no
+// tiene iconUrl). Si agregás una skill nueva con un iconName distinto acá,
+// agregalo también a este mapa y a AVAILABLE_FALLBACK_ICONS en lib/constants.ts.
+const FALLBACK_ICONS: Record<string, React.ComponentType<{ size?: number }>> = {
+  Network,
+  MonitorSmartphone,
+  Palette,
+};
 
-  useEffect(() => {
-    if (!go) return;
-    let i = 0;
-    const tick = () => {
-      if (i < text.length) {
-        i++;
-        setOut(text.slice(0, i));
-        tmr.current = setTimeout(tick, 26);
-      } else {
-        setDone(true);
-      }
-    };
-    const start = setTimeout(tick, startDelay);
-    return () => { clearTimeout(start); clearTimeout(tmr.current); };
-  }, [text, startDelay, go]);
+/* ── Icono ────────────────────────────────────────────────────────────────── */
+function SkillIcon({ skill, hex }: { skill: TSkill; hex: string }) {
+  if (skill.iconUrl) {
+    return (
+      <img
+        src={skill.iconUrl}
+        alt=""
+        loading="lazy"
+        className={`w-5 h-5 object-contain skill-icon-img${
+          skill.inv ? ' skill-icon-inv' : ''
+        }`}
+      />
+    );
+  }
 
-  return { out, done };
-}
-
-/* ── SkillLine ────────────────────────────────────────────────────────────── */
-function SkillLine({
-  skill, index, go, hex,
-}: {
-  skill: TSkill; index: number; go: boolean; hex: string;
-}) {
-  const [showResult, setShowResult] = useState(false);
-  const { out, done } = useTypewriter(`npm install ${skill.pkg}`, index * 280, go);
-
-  useEffect(() => {
-    if (!done) return;
-    const t = setTimeout(() => setShowResult(true), 160);
-    return () => clearTimeout(t);
-  }, [done]);
-
-  const fakeDuration = useRef(
-    ((index * 0.37 + 0.42) % 1.5 + 0.3).toFixed(1)
-  ).current;
-
-  // Resuelve el ícono: URL (devicon, etc.) o fallback Lucide por nombre.
+  // Antes esto siempre caía a Code2 — ahora primero busca el ícono real
+  // por iconName (Network, MonitorSmartphone, Palette) y solo si no hay
+  // ninguno coincidente usa el genérico como último recurso.
   const FallbackIcon = skill.iconName ? FALLBACK_ICONS[skill.iconName] : undefined;
 
-  const iconEl = skill.iconUrl ? (
-    <img
-      src={skill.iconUrl}
-      alt=""
-      loading="lazy"
-      className={`w-5 h-5 object-contain skill-icon-img${
-        skill.inv ? ' skill-icon-inv' : ''
-      }`}
-    />
-  ) : (
+  return (
     <span className="skill-icon-node" style={{ color: hex }}>
       {FallbackIcon ? <FallbackIcon size={17} /> : <Code2 size={17} />}
     </span>
-  );
-
-  if (!go && !out) return null;
-
-  return (
-    <div>
-      {/* Command line */}
-      <div className="flex items-center gap-2 font-mono text-[12.5px] py-[2px]">
-        <span
-          className="select-none flex-shrink-0 font-bold"
-          style={{ color: 'var(--term-prompt)' }}
-        >
-          ❯
-        </span>
-
-        <span style={{ color: 'var(--term-cmd-color)' }}>{out}</span>
-
-        {!done && (
-          <span
-            className="inline-block w-[7px] h-[13px] rounded-[1px] term-blink"
-            style={{ background: 'var(--term-cursor-bg)' }}
-          />
-        )}
-
-        {showResult && (
-          <motion.span
-            initial={{ opacity: 0, scale: 0.7 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ type: 'spring', stiffness: 280, damping: 18 }}
-            className="term-glow-green select-none text-sm ml-0.5 font-bold"
-            style={{ color: 'var(--term-check-color)' }}
-          >
-            ✓
-          </motion.span>
-        )}
-      </div>
-
-      {/* Result row */}
-      <AnimatePresence>
-        {showResult && (
-          <motion.div
-            initial={{ opacity: 0, x: -8, height: 0 }}
-            animate={{ opacity: 1, x: 0, height: 'auto' }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.22, ease: 'easeOut' }}
-            className="skill-row ml-5 mb-3 mt-0.5 flex items-start gap-2.5 p-2.5 rounded-md"
-            style={{
-              borderLeft: `1.5px solid ${hex}33`,
-              background: 'var(--term-row-bg)',
-            }}
-          >
-            <div
-              className="skill-glitch-icon flex-shrink-0 flex items-center
-                         justify-center w-7 h-7 rounded-md mt-0.5"
-              style={{ background: `${hex}12` }}
-            >
-              {iconEl}
-            </div>
-
-            <div>
-              <p
-                className="font-mono text-[10px] mb-1.5 tracking-wide
-                          flex items-center gap-1.5"
-                style={{ color: 'var(--term-added-label)' }}
-              >
-                added in
-                <span
-                  className="px-1 py-[1px] rounded text-[9px] font-semibold"
-                  style={{
-                    color: 'var(--term-added-value)',
-                    background: 'var(--term-added-badge-bg)',
-                    border: '1px solid var(--term-added-badge-border)',
-                    letterSpacing: '0.03em',
-                  }}
-                >
-                  {fakeDuration}s
-                </span>
-              </p>
-
-              <p
-                className="font-sans text-[11.5px] leading-relaxed"
-                style={{ color: 'var(--term-desc-color)' }}
-              >
-                {skill.desc}
-              </p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
   );
 }
 
@@ -189,14 +64,15 @@ function TerminalCard({
   cat: TCategory; enterDelay?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-60px' });
+  const isInView = useInView(ref, { once: true, margin: '-40px' });
+  const [expandedSkill, setExpandedSkill] = useState<string | null>(null);
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 28 }}
+      initial={{ opacity: 0, y: 24 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.52, delay: enterDelay, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.45, delay: enterDelay, ease: [0.22, 1, 0.36, 1] }}
       className="term-card relative flex flex-col rounded-xl overflow-hidden font-mono"
     >
       {/* Title bar */}
@@ -206,16 +82,12 @@ function TerminalCard({
           <div className="w-[11px] h-[11px] rounded-full bg-yellow-400" />
           <div className="w-[11px] h-[11px] rounded-full bg-green-400" />
         </div>
-
         <div
           className="flex-1 flex items-center justify-center gap-1.5 text-[11px]"
           style={{ color: 'var(--term-path-color)' }}
         >
           <Terminal size={11} className="flex-shrink-0" />
-          <span>
-            user@portfolio:
-            <span className={cat.accent}> {cat.path}</span>
-          </span>
+          <span>user@portfolio:<span className={cat.accent}> {cat.path}</span></span>
         </div>
       </div>
 
@@ -230,21 +102,15 @@ function TerminalCard({
               key="banner"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.08 }}
-              className="mb-5 text-[11px] space-y-0.5"
+              transition={{ delay: 0.06 }}
+              className="mb-4 text-[11px] space-y-1"
             >
-              <p
-                className="font-mono"
-                style={{ color: 'var(--term-banner-init)' }}
-              >
-                {`// Initiating skill deployment...`}
+              <p className="font-mono" style={{ color: 'var(--term-banner-init)' }}>
+                $ tree skills/{cat.id}/ --levels=2
               </p>
-
-              <p className={`font-mono ${cat.accent}`}>
-                {`$ cd `}{cat.path}&nbsp;
-                <span className="term-blink">█</span>
+              <p className="font-mono font-bold" style={{ color: cat.hex }}>
+                skills/{cat.id}/
               </p>
-
               <div
                 className="pt-3 border-t"
                 style={{ borderColor: 'var(--term-separator)' }}
@@ -253,17 +119,108 @@ function TerminalCard({
           )}
         </AnimatePresence>
 
-        <div className="relative z-10">
-          {cat.list.map((skill, i) => (
-            <SkillLine
-              key={skill.pkg}
-              skill={skill}
-              index={i}
-              go={isInView}
-              hex={cat.hex}
-            />
-          ))}
-        </div>
+        {/* Tree */}
+        <AnimatePresence>
+          {isInView && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.12, duration: 0.35 }}
+              className="space-y-[2px]"
+            >
+              {cat.list.map((skill, i) => {
+                const isLast = i === cat.list.length - 1;
+                const isExpanded = expandedSkill === skill.pkg;
+
+                return (
+                  <div key={skill.pkg}>
+                    {/* Línea principal */}
+                    <motion.button
+                      initial={{ opacity: 0, x: -4 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.12 + i * 0.04, duration: 0.2 }}
+                      onClick={() => setExpandedSkill(isExpanded ? null : skill.pkg)}
+                      style={{ cursor: 'pointer' }}
+                      className="skill-row w-full flex items-center gap-2 py-[3px] px-1 rounded
+                                 hover:bg-white/[0.03] transition-colors text-left group"
+                    >
+                      {/* Guías de árbol */}
+                      <span className="select-none flex-shrink-0 text-[10px]" style={{ color: 'var(--term-tree-guide)' }}>
+                        {isLast ? '└──' : '├──'}
+                      </span>
+
+                      {/* Icono */}
+                      <span className="skill-glitch-icon flex-shrink-0 flex items-center justify-center w-6 h-6 rounded
+                                     bg-white/[0.03]">
+                        <SkillIcon skill={skill} hex={cat.hex} />
+                      </span>
+
+                      {/* Nombre */}
+                      <span
+                        className="text-[12px] group-hover:underline truncate"
+                        style={{ color: 'var(--text-primary)' }}
+                      >
+                        {skill.pkg}
+                      </span>
+
+                      {/* Flecha expandir */}
+                      <motion.span
+                        animate={{ rotate: isExpanded ? 90 : 0 }}
+                        transition={{ duration: 0.15 }}
+                        className="flex-shrink-0 ml-auto"
+                        style={{ color: 'var(--text-muted)' }}
+                      >
+                        <ChevronRight size={10} />
+                      </motion.span>
+                    </motion.button>
+
+                    {/* Descripción expandible */}
+                    <AnimatePresence>
+                      {isExpanded && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="overflow-hidden"
+                        >
+                          <div
+                            className="ml-[28px] mb-1 px-3 py-2 rounded-md text-[11px] leading-relaxed"
+                            style={{
+                              background: `${cat.hex}08`,
+                              borderLeft: `1.5px solid ${cat.hex}40`,
+                              color: 'var(--term-desc-color)',
+                            }}
+                          >
+                            {skill.desc}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Footer */}
+        <AnimatePresence>
+          {isInView && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 + cat.list.length * 0.04 }}
+              className="mt-4 pt-3 border-t text-[12px]"
+              style={{
+                borderColor: 'var(--term-separator)',
+                color: 'var(--term-banner-init)',
+              }}
+            >
+              {cat.list.length} skills · 0 vulnerabilities
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </motion.div>
   );
@@ -277,56 +234,32 @@ export function SkillsClient({ categories }: { categories: TCategory[] }) {
       className="py-24 relative overflow-hidden"
       style={{ background: 'var(--bg-base)' }}
     >
-      <div
-        className="absolute inset-0 pointer-events-none z-0 global-scanlines"
-        aria-hidden
-      />
-
+      <div className="absolute inset-0 pointer-events-none z-0 global-scanlines" aria-hidden />
       <div className="absolute inset-0 pointer-events-none z-0" aria-hidden>
-        <div className="absolute top-0 right-1/4 w-96 h-96 rounded-full
-                        blur-3xl bg-cyan-500/[0.04]" />
-        <div className="absolute bottom-0 left-1/4 w-96 h-96 rounded-full
-                        blur-3xl bg-purple-500/[0.05]" />
+        <div className="absolute top-0 right-1/4 w-96 h-96 rounded-full blur-3xl bg-cyan-500/[0.04]" />
+        <div className="absolute bottom-0 left-1/4 w-96 h-96 rounded-full blur-3xl bg-purple-500/[0.05]" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-14 text-center font-mono space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full
-                          text-[11px] border border-green-500/25
-                          bg-green-500/[0.08] text-green-600
-                          dark:text-green-400">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-500
-                             dark:bg-green-400 animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] border border-green-500/25 bg-green-500/[0.08] text-green-600 dark:text-green-400">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500 dark:bg-green-400 animate-pulse" />
             SYSTEM ONLINE
           </div>
-
-          <h2
-            className="text-4xl md:text-5xl font-bold tracking-tight"
-            style={{ color: 'var(--text-primary)' }}
-          >
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>
             {'> '}&nbsp;Tech_Stack
-            <span
-              className="term-blink"
-              style={{ color: 'var(--text-primary)' }}
-            >
-              █
-            </span>
+            <span className="term-blink" style={{ color: 'var(--text-primary)' }}>█</span>
           </h2>
-
-          <p
-            className="font-sans text-sm max-w-md mx-auto"
-            style={{ color: 'var(--text-muted)' }}
-          >
-            Initializing module dependencies.
-            Scroll to execute installation scripts.
+          <p className="font-sans text-sm max-w-md mx-auto" style={{ color: 'var(--text-muted)' }}>
+            $ tree skills/ --levels=2
           </p>
         </div>
 
         {/* Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-6 items-start">
           {categories.map((cat, i) => (
-            <TerminalCard key={cat.id} cat={cat} enterDelay={i * 0.12} />
+            <TerminalCard key={cat.id} cat={cat} enterDelay={i * 0.1} />
           ))}
         </div>
 
