@@ -430,7 +430,7 @@ body {
   --term-titlebar-bg:      #15151f;
   --term-titlebar-border:  rgba(255, 255, 255, 0.06);
   --term-path-color:       #475569;
-  --term-banner-init:      #374151;
+  --term-banner-init:      #64748b;
   --term-separator:        rgba(255, 255, 255, 0.06);
   --term-prompt:           #f472b6;   /* pink-400  */
   --term-cmd-color:        #94a3b8;   /* slate-400 */
