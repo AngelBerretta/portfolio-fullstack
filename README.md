@@ -2,7 +2,7 @@
 
 Portfolio personal construido como una aplicación **full stack real**, no como una landing estática: tiene su propia base de datos, autenticación, panel de administración y envío de mails server-side. La idea fue que el portfolio en sí mismo funcione como una pieza más para mostrar en una entrevista, no solo como una vidriera de proyectos.
 
-🔗 **Demo en vivo:** [angelberretta.dev](https://angelberretta.dev)
+🔗 **Demo en vivo:** [https://portfolio-fullstack-angel.vercel.app/](https://portfolio-fullstack-angel.vercel.app/)
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
