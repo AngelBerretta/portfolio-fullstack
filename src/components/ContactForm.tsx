@@ -1,6 +1,5 @@
+// ContactForm.tsx — textarea con altura fija cómoda, sin flex-1
 "use client";
-
-// ContactForm.tsx — formulario de contacto, envía vía Server Action (Resend)
 import { useActionState, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
@@ -14,15 +13,10 @@ export function ContactForm({ isInView }: { isInView: boolean }) {
   const [state, formAction, isPending] = useActionState(sendContactMessage, null);
   const [showResult, setShowResult] = useState(false);
 
-  // Mismo comportamiento que la versión anterior: mostramos el resultado
-  // (éxito o error) por unos segundos y después el botón vuelve a su estado
-  // normal, listo para un nuevo envío.
   useEffect(() => {
     if (!state) return;
     setShowResult(true);
-    if (state.success) {
-      formRef.current?.reset();
-    }
+    if (state.success) formRef.current?.reset();
     const timeout = setTimeout(() => setShowResult(false), 5000);
     return () => clearTimeout(timeout);
   }, [state]);
@@ -41,7 +35,7 @@ export function ContactForm({ isInView }: { isInView: boolean }) {
       <h3 className="font-bold text-lg mb-6 [color:var(--text-primary)]">Enviame un mensaje</h3>
 
       <form ref={formRef} action={formAction} className="space-y-4">
-        {/* Honeypot anti-spam: invisible para una persona, los bots lo completan */}
+        {/* Honeypot */}
         <input
           type="text"
           name="company"
@@ -93,9 +87,10 @@ export function ContactForm({ isInView }: { isInView: boolean }) {
 
         <div>
           <label className="block text-xs font-medium mb-2 [color:var(--text-muted)]">Mensaje</label>
+          {/* ── altura fija cómoda: ni muy chico ni exagerado ── */}
           <textarea
             name="message"
-            rows={5}
+            rows={6}
             className={`${inputClass} resize-none`}
             placeholder="Contame tu proyecto o propuesta..."
             required
@@ -116,30 +111,15 @@ export function ContactForm({ isInView }: { isInView: boolean }) {
               ? 'bg-red-500/80 text-white shadow-red-500/25'
               : isPending
               ? 'bg-blue-500/50 text-white'
-              : 'bg-gradient-to-r from-blue-500 to-violet-600 text-white shadow-blue-500/25 hover:shadow-blue-500/50 hover:scale-[1.02]'
+              : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-blue-500/25 hover:from-blue-500 hover:to-blue-700 hover:shadow-blue-500/50 hover:scale-[1.02]'
           }`}
         >
-          {isPending && (
-            <>
-              <Loader2 size={16} className="animate-spin" /> Enviando...
-            </>
-          )}
-          {!isPending && showSuccess && (
-            <>
-              <CheckCircle size={18} /> ¡Mensaje enviado!
-            </>
-          )}
+          {isPending && <><Loader2 size={16} className="animate-spin" /> Enviando...</>}
+          {!isPending && showSuccess && <><CheckCircle size={18} /> ¡Mensaje enviado!</>}
           {!isPending && showError && (
-            <>
-              <AlertCircle size={16} />
-              {state && !state.success ? state.error : 'Error al enviar'}
-            </>
+            <><AlertCircle size={16} />{state && !state.success ? state.error : 'Error al enviar'}</>
           )}
-          {!isPending && !showSuccess && !showError && (
-            <>
-              <Send size={16} /> Enviar mensaje
-            </>
-          )}
+          {!isPending && !showSuccess && !showError && <><Send size={16} /> Enviar mensaje</>}
         </button>
 
         <p className="text-xs text-center [color:var(--text-muted)]">

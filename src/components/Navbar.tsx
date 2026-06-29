@@ -114,7 +114,7 @@ export default function Navbar() {
               href="/Angel_Berretta_CV_2026.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="ml-3 px-4 py-2 text-sm font-semibold rounded-lg bg-gradient-to-r from-blue-500 to-violet-600 text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/50 hover:scale-105 transition-all duration-300"
+              className="ml-3 px-4 py-2 text-sm font-semibold rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25 hover:from-blue-500 hover:to-blue-700 hover:shadow-blue-500/50 hover:scale-105 transition-all duration-300"
             >
               Descargar CV
             </a>
