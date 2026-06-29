@@ -58,7 +58,7 @@ export default async function DashboardPage() {
           Hola, {session?.user?.email?.split('@')[0]} 👋
         </h1>
         <p className="text-gray-500 text-sm mt-1">
-          Resumen general de tu portfolio.
+          Resumen general del portfolio.
         </p>
       </div>
 

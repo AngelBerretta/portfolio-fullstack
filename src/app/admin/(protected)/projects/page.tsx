@@ -14,7 +14,7 @@ export default async function ProjectsPage() {
         <div>
           <h1 className="text-2xl font-bold text-white">Proyectos</h1>
           <p className="text-gray-500 text-sm mt-1">
-            {projects.length} proyecto{projects.length !== 1 && 's'} en tu portfolio.
+            {projects.length} proyecto{projects.length !== 1 && 's'} en el portfolio.
           </p>
         </div>
         <Link
