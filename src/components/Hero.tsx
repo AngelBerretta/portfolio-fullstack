@@ -191,7 +191,7 @@ export default function Hero() {
           {[
             { number: '8+', label: 'Proyectos' },
             { number: '1+', label: 'Año freelance' },
-            { number: '10+', label: 'Tecnologías' },
+            { number: '20+', label: 'Tecnologías' },
           ].map((stat) => (
             <div key={stat.label} className="text-center">
               <div className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-sky-400 mb-1">

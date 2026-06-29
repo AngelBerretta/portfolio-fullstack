@@ -45,7 +45,7 @@ export default function Footer() {
 
           {/* Stack */}
           <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--text-muted)' }}>
-            <span className="px-2 py-0.5 rounded-md" style={{ background: 'var(--footer-stack-bg)', border: '1px solid var(--footer-stack-border)', color: 'var(--text-muted)' }}>React</span>
+            <span className="px-2 py-0.5 rounded-md" style={{ background: 'var(--footer-stack-bg)', border: '1px solid var(--footer-stack-border)', color: 'var(--text-muted)' }}>Next.js</span>
             <span className="" style={{ color: 'var(--text-faint)' }}>+</span>
             <span className="px-2 py-0.5 rounded-md" style={{ background: 'var(--footer-stack-bg)', border: '1px solid var(--footer-stack-border)', color: 'var(--text-muted)' }}>TypeScript</span>
             <span className="" style={{ color: 'var(--text-faint)' }}>+</span>
