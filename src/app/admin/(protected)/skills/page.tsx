@@ -16,7 +16,7 @@ export default async function SkillsPage() {
         <div>
           <h1 className="text-2xl font-bold text-white">Tecnologías</h1>
           <p className="text-gray-500 text-sm mt-1">
-            {skills.length} skill{skills.length !== 1 && 's'} mostradas en la terminal de tu portfolio.
+            {skills.length} skill{skills.length !== 1 && 's'} mostradas en la terminal del portfolio.
           </p>
         </div>
         <Link

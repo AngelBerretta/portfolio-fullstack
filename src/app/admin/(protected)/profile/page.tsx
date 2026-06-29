@@ -11,7 +11,7 @@ export default async function ProfilePage() {
       <div>
         <h1 className="text-2xl font-bold text-white">Perfil</h1>
         <p className="text-gray-500 text-sm mt-1">
-          Esta información aparece en la sección &quot;Sobre mí&quot; de tu portfolio.
+          Esta información se muestra en la sección &quot;Sobre mí&quot; del portfolio.
         </p>
       </div>
 
