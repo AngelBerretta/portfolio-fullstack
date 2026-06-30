@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     description:
       "Portfolio de Angel Berretta, Desarrollador Full Stack Freelance. React, Node.js, Firebase y más.",
     type: "website",
-    url: "https://angelcodes.netlify.app",
+    url: "https://portfolio-fullstack-angel.vercel.app/",
   },
   twitter: {
     card: "summary_large_image",

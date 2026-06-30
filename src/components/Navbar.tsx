@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import { Code2, Home, User, Zap, FolderOpen, Mail } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { NavbarMobileMenu } from './NavbarMobileMenu';
+import { useScrollState } from '@/hooks/useScrollState';    
+import { useActiveSection } from '@/hooks/useActiveSection';
 
 const navLinks = [
   { label: 'Inicio',    href: '#hero',     icon: <Home      size={16} /> },
@@ -15,24 +17,9 @@ const navLinks = [
 ];
 
 export default function Navbar() {
-  const [scrolled,  setScrolled]  = useState(false);
-  const [active,    setActive]    = useState('hero');
-  const [menuOpen,  setMenuOpen]  = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
-      const sections = ['hero', 'about', 'skills', 'projects', 'contact'];
-      let current = 'hero';
-      for (const id of sections) {
-        const el = document.getElementById(id);
-        if (el && el.getBoundingClientRect().top <= 80) current = id;
-      }
-      setActive(current);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const { isScrolled } = useScrollState()
+  const active = useActiveSection()
 
   // Lock body scroll when menu is open
   useEffect(() => {
@@ -54,11 +41,11 @@ export default function Navbar() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled
+          isScrolled
             ? 'backdrop-blur-xl shadow-lg shadow-black/20'
             : 'bg-transparent'
         }`}
-        style={scrolled ? { background: 'var(--bg-nav)' } : undefined}
+        style={isScrolled? { background: 'var(--bg-nav)' } : undefined}
       >
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
 
