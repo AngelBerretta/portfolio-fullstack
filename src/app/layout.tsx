@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import { MotionProvider } from "@/components/MotionProvider";
 
 const inter = Inter({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  // Antes: ["300", "400", "500", "600", "700", "800", "900"] — 7 archivos
+  // Ahora: solo los 4 pesos que realmente usa el sitio público
+  weight: ["400", "500", "600", "700"],
   variable: "--font-inter",
   display: "swap",
 });
@@ -55,10 +58,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" data-scroll-behavior="smooth">
-      <body
-        className={`${inter.variable} ${spaceGrotesk.variable} font-sans`}
-      >
-        {children}
+      <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans`}>
+        {/* MotionProvider habilita LazyMotion para todos los componentes hijos.
+            Todos los motion.X → m.X del sitio quedan cubiertos desde acá. */}
+        <MotionProvider>
+          {children}
+        </MotionProvider>
       </body>
     </html>
   );

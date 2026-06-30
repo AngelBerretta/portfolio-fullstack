@@ -1,6 +1,6 @@
 // ContactInfo.tsx — stats integrados en el card de disponibilidad, horario compacto
 "use client";
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Mail, Phone, MapPin, Clock } from 'lucide-react';
 
 const GitHubIcon = () => (
@@ -64,7 +64,7 @@ const schedule = [
 
 export function ContactInfo({ isInView }: { isInView: boolean }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, x: -30 }}
       animate={isInView ? { opacity: 1, x: 0 } : {}}
       transition={{ duration: 0.6, delay: 0.1 }}
@@ -98,7 +98,7 @@ export function ContactInfo({ isInView }: { isInView: boolean }) {
       {/* ── Contact details ── */}
       <div className="space-y-2">
         {contactInfo.map((item, i) => (
-          <motion.div
+          <m.div
             key={item.label}
             initial={{ opacity: 0, x: -20 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -119,7 +119,7 @@ export function ContactInfo({ isInView }: { isInView: boolean }) {
                 <p className="text-sm font-medium [color:var(--text-secondary)]">{item.value}</p>
               )}
             </div>
-          </motion.div>
+          </m.div>
         ))}
       </div>
 
@@ -173,6 +173,6 @@ export function ContactInfo({ isInView }: { isInView: boolean }) {
         </div>
 
       </div>
-    </motion.div>
+    </m.div>
   );
 }

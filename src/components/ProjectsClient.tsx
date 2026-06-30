@@ -2,7 +2,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { m, useInView, AnimatePresence } from 'framer-motion';
 import { Layers, Code2, Layout, Globe, Clock } from 'lucide-react';
 import { ProjectCard, UpcomingCard, type ProjectCardData } from './ProjectCards';
 
@@ -50,7 +50,7 @@ export function ProjectsClient({
       <div className="relative z-10 max-w-7xl mx-auto px-6" ref={ref}>
 
         {/* ── Header ── */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
@@ -66,10 +66,10 @@ export function ProjectsClient({
             Una selección de proyectos freelance, personales y full stack en desarrollo.
           </p>
           <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-violet-400 rounded-full mx-auto mt-5" />
-        </motion.div>
+        </m.div>
 
         {/* ── Filter tabs ── */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.15 }}
@@ -92,7 +92,7 @@ export function ProjectsClient({
               >
                 {/* Pill animado para el tab activo */}
                 {isActive && (
-                  <motion.span
+                  <m.span
                     layoutId="filter-pill"
                     className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 -z-10"
                     transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
@@ -115,11 +115,11 @@ export function ProjectsClient({
               </button>
             );
           })}
-        </motion.div>
+        </m.div>
 
         {/* ── Grid proyectos live ── */}
         <AnimatePresence mode="wait">
-          <motion.div
+          <m.div
             key={activeCategory}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -133,7 +133,7 @@ export function ProjectsClient({
               ))
             ) : (
               /* Empty state */
-              <motion.div
+              <m.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 className="col-span-full flex flex-col items-center justify-center py-20 gap-4"
@@ -144,15 +144,15 @@ export function ProjectsClient({
                 <p className="text-sm font-medium [color:var(--text-muted)]">
                   No hay proyectos en esta categoría aún
                 </p>
-              </motion.div>
+              </m.div>
             )}
-          </motion.div>
+          </m.div>
         </AnimatePresence>
 
         {/* ── Proyectos en construcción ── */}
         <AnimatePresence>
           {showUpcoming && upcomingProjects.length > 0 && (
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
@@ -179,12 +179,12 @@ export function ProjectsClient({
                   <UpcomingCard key={project.id} project={project} index={i} />
                 ))}
               </div>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
 
         {/* ── Footer contador ── */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ delay: 0.8 }}
@@ -203,7 +203,7 @@ export function ProjectsClient({
             )}
           </p>
           <div className="h-px w-16 [background:var(--border-subtle)]" />
-        </motion.div>
+        </m.div>
 
       </div>
     </section>

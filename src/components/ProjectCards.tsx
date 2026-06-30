@@ -1,6 +1,6 @@
 // ProjectCards.tsx
 import { useRef, useState } from 'react';
-import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { m, useInView, AnimatePresence } from 'framer-motion';
 import { ExternalLink, Code2, Star, Clock, ChevronDown } from 'lucide-react';
 import Image from 'next/image';
 
@@ -52,7 +52,7 @@ function TagList({ tags }: { tags: string[] }) {
     <div className="flex flex-wrap gap-1.5 mb-4">
       <AnimatePresence initial={false}>
         {visible.map((tag) => (
-          <motion.span
+          <m.span
             key={tag}
             initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -62,7 +62,7 @@ function TagList({ tags }: { tags: string[] }) {
               [background:var(--bg-card)] [border-color:var(--border-subtle)] [color:var(--text-muted)]"
           >
             {tag}
-          </motion.span>
+          </m.span>
         ))}
       </AnimatePresence>
 
@@ -101,7 +101,7 @@ export function ProjectCard({
   const catCfg = categoryConfig[project.category];
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       initial={{ opacity: 0, y: 40 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -225,7 +225,7 @@ export function ProjectCard({
         </div>
 
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -276,7 +276,7 @@ export function UpcomingCard({
   };
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       initial={{ opacity: 0, y: 40 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -307,7 +307,7 @@ export function UpcomingCard({
 
         {/* Logo / initials */}
         <div className="relative z-10 flex flex-col items-center gap-3">
-          <motion.div
+          <m.div
             whileHover={{ scale: 1.08 }}
             transition={{ type: 'spring', stiffness: 300 }}
             className="w-16 h-16 rounded-2xl flex items-center justify-center border-2"
@@ -322,7 +322,7 @@ export function UpcomingCard({
             >
               {cfg.initials}
             </span>
-          </motion.div>
+          </m.div>
 
           {/* Status pill */}
           <span className="text-[10px] font-bold tracking-widest uppercase
@@ -372,6 +372,6 @@ export function UpcomingCard({
         </div>
 
       </div>
-    </motion.div>
+    </m.div>
   );
 }

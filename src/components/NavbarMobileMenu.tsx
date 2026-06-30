@@ -1,7 +1,6 @@
 "use client";
 
-// NavbarMobileMenu.tsx — overlay y panel del menú móvil
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';   // ← m en vez de motion
 import { ChevronRight } from 'lucide-react';
 
 interface NavLink {
@@ -30,7 +29,7 @@ export function NavbarMobileMenu({
       {/* ── Mobile overlay ────────────────────────────────────────────── */}
       <AnimatePresence>
         {menuOpen && (
-          <motion.div
+          <m.div
             key="overlay"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -45,7 +44,7 @@ export function NavbarMobileMenu({
       {/* ── Mobile menu panel ─────────────────────────────────────────── */}
       <AnimatePresence>
         {menuOpen && (
-          <motion.div
+          <m.div
             key="menu"
             initial={{ opacity: 0, y: -8, scaleY: 0.95 }}
             animate={{ opacity: 1, y: 0,  scaleY: 1 }}
@@ -55,7 +54,6 @@ export function NavbarMobileMenu({
             style={{ transformOrigin: 'top center' }}
           >
             <div className="px-4 py-4">
-              {/* Nav section */}
               <p
                 className="text-[11px] font-semibold uppercase tracking-widest mb-2 px-2"
                 style={{ color: 'var(--text-muted)' }}
@@ -67,7 +65,7 @@ export function NavbarMobileMenu({
                   const id = link.href.replace('#', '');
                   const isActive = active === id;
                   return (
-                    <motion.button
+                    <m.button
                       key={link.href}
                       initial={{ opacity: 0, x: -12 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -85,16 +83,14 @@ export function NavbarMobileMenu({
                       </span>
                       <span>{link.label}</span>
                       <ChevronRight size={14} className="nav-chevron text-blue-400" />
-                    </motion.button>
+                    </m.button>
                   );
                 })}
               </div>
 
-              {/* Divider */}
               <div className="h-px mb-4" style={{ background: 'var(--border-subtle)' }} />
 
-              {/* CV button */}
-              <motion.a
+              <m.a
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.25 }}
@@ -105,9 +101,9 @@ export function NavbarMobileMenu({
                 onClick={onClose}
               >
                 Descargar CV
-              </motion.a>
+              </m.a>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </>

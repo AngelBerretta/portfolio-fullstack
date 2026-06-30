@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Mail, ArrowDown, Sparkles } from 'lucide-react';
 import { HeroParticles } from './HeroParticles';
 import { useTypewriter } from '../hooks/useTypewriter';
@@ -57,7 +57,7 @@ export default function Hero() {
       <div className="relative z-10 max-w-6xl mx-auto px-6 py-28 flex flex-col items-center text-center">
 
         {/* Name */}
-        <motion.h1
+        <m.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1 }}
@@ -67,10 +67,10 @@ export default function Hero() {
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-400 to-cyan-300 glow-text">
             Berretta
           </span>
-        </motion.h1>
+        </m.h1>
 
         {/* Typewriter */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
@@ -80,10 +80,10 @@ export default function Hero() {
             {typedText}
             <span className="cursor-blink text-blue-400 ml-0.5">|</span>
           </span>
-        </motion.div>
+        </m.div>
 
         {/* Description */}
-        <motion.p
+        <m.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
@@ -97,10 +97,10 @@ export default function Hero() {
           <span className="font-medium [color:var(--text-secondary)]">
             ¡Estoy listo para aportar creatividad y compromiso a nuevos desafíos!
           </span>
-        </motion.p>
+        </m.p>
 
         {/* Status badge */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.45 }}
@@ -113,10 +113,10 @@ export default function Hero() {
           <span className="w-2 h-2 rounded-full bg-green-500 dark:bg-green-400 animate-pulse" />
           Disponible para trabajar
           {/* <Sparkles size={14} className="text-yellow-500 dark:text-yellow-400" /> */}
-        </motion.div>
+        </m.div>
 
         {/* CTA Buttons */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
@@ -138,10 +138,10 @@ export default function Hero() {
           >
             Contactame
           </button>
-        </motion.div>
+        </m.div>
 
         {/* Socials */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
@@ -179,10 +179,10 @@ export default function Hero() {
               {s.icon}
             </a>
           ))}
-        </motion.div>
+        </m.div>
 
         {/* Stats */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.7 }}
@@ -202,11 +202,11 @@ export default function Hero() {
               </div>
             </div>
           ))}
-        </motion.div>
+        </m.div>
       </div>
 
       {/* Scroll cue */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
@@ -221,7 +221,7 @@ export default function Hero() {
         <div className="scroll-cue-arrow">
           <ArrowDown size={16} />
         </div>
-      </motion.div>
+      </m.div>
     </section>
   );
 }

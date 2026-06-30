@@ -1,5 +1,5 @@
 // AboutAvatar.tsx — columna izquierda de About: avatar, rings y trait pills
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import Image from 'next/image';           // ← agregamos este import
 import type { CSSProperties } from 'react';
 import { Coffee, Zap, Code2 } from 'lucide-react';
@@ -18,7 +18,7 @@ export function AboutAvatar({
   avatarUrl: string;
 }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, x: -40 }}
       animate={isInView ? { opacity: 1, x: 0 } : {}}
       transition={{ duration: 0.7, delay: 0.1 }}
@@ -78,6 +78,6 @@ export function AboutAvatar({
           </div>
         ))}
       </div>
-    </motion.div>
+    </m.div>
   );
 }

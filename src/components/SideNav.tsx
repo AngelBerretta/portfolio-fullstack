@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { useScrollState } from '@/hooks/useScrollState';
 import { useActiveSection } from '@/hooks/useActiveSection';
 
@@ -21,7 +21,7 @@ export default function SideNav() {
   };
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: isSideNavVisible ? 1 : 0, x: isSideNavVisible ? 0 : 20 }}
       transition={{ duration: 0.4 }}
@@ -55,6 +55,6 @@ export default function SideNav() {
           </button>
         );
       })}
-    </motion.div>
+    </m.div>
   );
 }
