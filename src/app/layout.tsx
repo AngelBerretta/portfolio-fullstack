@@ -5,8 +5,6 @@ import { MotionProvider } from "@/components/MotionProvider";
 
 const inter = Inter({
   subsets: ["latin"],
-  // Antes: ["300", "400", "500", "600", "700", "800", "900"] — 7 archivos
-  // Ahora: solo los 4 pesos que realmente usa el sitio público
   weight: ["400", "500", "600", "700"],
   variable: "--font-inter",
   display: "swap",
@@ -51,16 +49,30 @@ export const metadata: Metadata = {
   },
 };
 
+const themeScript = `
+(function() {
+  try {
+    var stored = localStorage.getItem('portfolio-theme');
+    var theme = (stored === 'dark' || stored === 'light')
+      ? stored
+      : (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+  } catch (e) {}
+})();
+`;
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" data-scroll-behavior="smooth">
+    <html lang="es" data-scroll-behavior="smooth" data-theme="dark" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans`}>
-        {/* MotionProvider habilita LazyMotion para todos los componentes hijos.
-            Todos los motion.X → m.X del sitio quedan cubiertos desde acá. */}
         <MotionProvider>
           {children}
         </MotionProvider>
