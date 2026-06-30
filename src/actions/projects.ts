@@ -5,7 +5,7 @@ import { prisma } from '@/lib/db';
 import { requireAuth } from '@/lib/require-auth';
 import { ProjectSchema, ReorderSchema } from '@/lib/validations';
 import { ok, err, type ActionResult } from '@/lib/action-types';
-import type { Project } from '@prisma/client';
+import { unstable_cache } from 'next/cache';
 
 // ─── Helpers internos ────────────────────────────────────────────────────────
 
@@ -209,13 +209,29 @@ export async function reorderProjects(
 
 // ─── READ HELPERS (para Server Components) ───────────────────────────────────
 
-export async function getAllProjects() {
+// La query base — no se exporta directamente
+async function _getAllProjects() {
   return prisma.project.findMany({
     include: { tags: true },
     orderBy: { order: 'asc' },
   });
 }
 
+/**
+ * Versión cacheada de getAllProjects.
+ * - Se sirve desde caché estático hasta que revalidatePath('/') sea llamado
+ *   (lo cual ya ocurre en cada mutación del admin).
+ * - El tag 'projects' permite invalidar solo proyectos si algún día
+ *   querés ser más granular.
+ */
+export const getAllProjects = unstable_cache(
+  _getAllProjects,
+  ['all-projects'],          // cache key
+  { tags: ['projects'] }    // tag para invalidación granular futura
+);
+
+// getProjectById no lo cacheamos — solo se usa en el admin
+// donde siempre queremos datos frescos
 export async function getProjectById(id: string) {
   return prisma.project.findUnique({
     where: { id },
