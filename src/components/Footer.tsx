@@ -1,6 +1,6 @@
 "use client";
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';          // ← m en vez de motion
 import { Code2, Heart } from 'lucide-react';
 
 export default function Footer() {
@@ -9,7 +9,7 @@ export default function Footer() {
   return (
     <footer className="relative py-10 border-t" style={{ borderColor: 'var(--border-subtle)' }}>
       <div className="max-w-7xl mx-auto px-6">
-        <motion.div
+        <m.div                               // ← m.div en vez de motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -51,7 +51,7 @@ export default function Footer() {
             <span className="" style={{ color: 'var(--text-faint)' }}>+</span>
             <span className="px-2 py-0.5 rounded-md" style={{ background: 'var(--footer-stack-bg)', border: '1px solid var(--footer-stack-border)', color: 'var(--text-muted)' }}>Tailwind</span>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </footer>
   );

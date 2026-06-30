@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useInView } from 'framer-motion';
+import { m, useInView } from 'framer-motion';
 import type { CSSProperties } from 'react';
 import { useRef } from 'react';
 import { MapPin, GraduationCap, Briefcase, Code2 } from 'lucide-react';
@@ -46,7 +46,7 @@ export function AboutClient({
 
       <div className="relative z-10 max-w-7xl mx-auto px-6" ref={ref}>
         {/* Section header */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
@@ -59,14 +59,14 @@ export function AboutClient({
             ¿Quién soy?
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-violet-400 rounded-full mx-auto mt-4" />
-        </motion.div>
+        </m.div>
 
         <div className="grid lg:grid-cols-2 gap-14 items-start">
           {/* Left — avatar + decorative */}
           <AboutAvatar isInView={isInView} avatarUrl={avatarUrl} />
 
           {/* Right — text + cards */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, x: 40 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.2 }}
@@ -81,7 +81,7 @@ export function AboutClient({
             {/* Info grid */}
             <div className="grid sm:grid-cols-2 gap-3 pt-2">
               {infoCards.map((card, i) => (
-                <motion.div
+                <m.div
                   key={card.label}
                   initial={{ opacity: 0, y: 20 }}
                   animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -96,13 +96,13 @@ export function AboutClient({
                       <p className="text-sm font-medium leading-snug" style={{ color: 'var(--text-secondary)' }}>{card.value}</p>
                     </div>
                   </div>
-                </motion.div>
+                </m.div>
               ))}
             </div>
 
             {/* CV download */}
             {cvUrl && (
-              <motion.div
+              <m.div
                 initial={{ opacity: 0 }}
                 animate={isInView ? { opacity: 1 } : {}}
                 transition={{ delay: 0.7 }}
@@ -119,9 +119,9 @@ export function AboutClient({
                   </svg>
                   Descargar CV completo
                 </a>
-              </motion.div>
+              </m.div>
             )}
-          </motion.div>
+          </m.div>
         </div>
       </div>
     </section>

@@ -2,7 +2,7 @@
 "use client";
 
 import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { m, useInView } from 'framer-motion';
 import { ContactInfo } from './ContactInfo';
 import { ContactForm } from './ContactForm';
 
@@ -19,7 +19,7 @@ export default function Contact() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-6" ref={ref}>
         {/* Header */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
@@ -35,7 +35,7 @@ export default function Contact() {
             ¿Tenés un proyecto en mente? Estoy disponible para trabajar Full Time. ¡Hablemos!
           </p>
           <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-violet-400 rounded-full mx-auto mt-5" />
-        </motion.div>
+        </m.div>
 
         {/* ── items-start: cada columna toma su altura natural ── */}
         <div className="grid lg:grid-cols-2 gap-10 items-start">

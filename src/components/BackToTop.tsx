@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { ArrowUp } from 'lucide-react';
 import { useScrollState } from '@/hooks/useScrollState';
 
@@ -10,7 +10,7 @@ export default function BackToTop() {
   return (
     <AnimatePresence>
       {showBackToTop && (
-        <motion.button
+        <m.button
           initial={{ opacity: 0, scale: 0.8, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.8, y: 20 }}
@@ -20,7 +20,7 @@ export default function BackToTop() {
           aria-label="Volver arriba"
         >
           <ArrowUp size={20} />
-        </motion.button>
+        </m.button>
       )}
     </AnimatePresence>
   );

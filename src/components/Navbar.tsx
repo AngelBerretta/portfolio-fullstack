@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Code2, Home, User, Zap, FolderOpen, Mail } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { NavbarMobileMenu } from './NavbarMobileMenu';
@@ -36,7 +36,7 @@ export default function Navbar() {
 
   return (
     <>
-      <motion.header
+      <m.header
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
@@ -77,7 +77,7 @@ export default function Navbar() {
                   style={{ color: isActive ? 'var(--text-primary)' : 'var(--text-muted)' }}
                 >
                   {isActive && (
-                    <motion.span
+                    <m.span
                       layoutId="nav-active"
                       className="absolute inset-0 rounded-lg"
                       style={{
@@ -116,11 +116,11 @@ export default function Navbar() {
               aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
               aria-expanded={menuOpen}
             >
-              <motion.div
+              <m.div
                 animate={menuOpen ? 'open' : 'closed'}
                 className="flex flex-col justify-center items-center gap-[5px] w-5"
               >
-                <motion.span
+                <m.span
                   variants={{
                     closed: { rotate: 0,   y: 0,   scaleX: 1 },
                     open:   { rotate: 45,  y: 7,   scaleX: 1 },
@@ -129,7 +129,7 @@ export default function Navbar() {
                   className="block h-[1.5px] w-5 rounded-full bg-current origin-center"
                   style={{ color: 'var(--text-secondary)' }}
                 />
-                <motion.span
+                <m.span
                   variants={{
                     closed: { opacity: 1, scaleX: 1 },
                     open:   { opacity: 0, scaleX: 0 },
@@ -138,7 +138,7 @@ export default function Navbar() {
                   className="block h-[1.5px] w-4 rounded-full bg-current origin-center"
                   style={{ color: 'var(--text-secondary)' }}
                 />
-                <motion.span
+                <m.span
                   variants={{
                     closed: { rotate: 0,   y: 0,   scaleX: 0.75 },
                     open:   { rotate: -45, y: -7,  scaleX: 1    },
@@ -147,11 +147,11 @@ export default function Navbar() {
                   className="block h-[1.5px] w-5 rounded-full bg-current origin-center"
                   style={{ color: 'var(--text-secondary)' }}
                 />
-              </motion.div>
+              </m.div>
             </button>
           </div>
         </div>
-      </motion.header>
+      </m.header>
 
       <NavbarMobileMenu
         menuOpen={menuOpen}

@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { m, useInView, AnimatePresence } from 'framer-motion';
 import { Terminal, ChevronRight, Code2, Network, MonitorSmartphone, Palette } from 'lucide-react';
 
 /* ── Tipos ────────────────────────────────────────────────────────────────── */
@@ -68,7 +68,7 @@ function TerminalCard({
   const [expandedSkill, setExpandedSkill] = useState<string | null>(null);
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       initial={{ opacity: 0, y: 24 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -98,7 +98,7 @@ function TerminalCard({
 
         <AnimatePresence>
           {isInView && (
-            <motion.div
+            <m.div
               key="banner"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -115,14 +115,14 @@ function TerminalCard({
                 className="pt-3 border-t"
                 style={{ borderColor: 'var(--term-separator)' }}
               />
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
 
         {/* Tree */}
         <AnimatePresence>
           {isInView && (
-            <motion.div
+            <m.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.12, duration: 0.35 }}
@@ -135,7 +135,7 @@ function TerminalCard({
                 return (
                   <div key={skill.pkg}>
                     {/* Línea principal */}
-                    <motion.button
+                    <m.button
                       initial={{ opacity: 0, x: -4 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.12 + i * 0.04, duration: 0.2 }}
@@ -164,20 +164,20 @@ function TerminalCard({
                       </span>
 
                       {/* Flecha expandir */}
-                      <motion.span
+                      <m.span
                         animate={{ rotate: isExpanded ? 90 : 0 }}
                         transition={{ duration: 0.15 }}
                         className="flex-shrink-0 ml-auto"
                         style={{ color: 'var(--text-muted)' }}
                       >
                         <ChevronRight size={10} />
-                      </motion.span>
-                    </motion.button>
+                      </m.span>
+                    </m.button>
 
                     {/* Descripción expandible */}
                     <AnimatePresence>
                       {isExpanded && (
-                        <motion.div
+                        <m.div
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: 'auto' }}
                           exit={{ opacity: 0, height: 0 }}
@@ -194,20 +194,20 @@ function TerminalCard({
                           >
                             {skill.desc}
                           </div>
-                        </motion.div>
+                        </m.div>
                       )}
                     </AnimatePresence>
                   </div>
                 );
               })}
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
 
         {/* Footer */}
         <AnimatePresence>
           {isInView && (
-            <motion.div
+            <m.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 + cat.list.length * 0.04 }}
@@ -218,11 +218,11 @@ function TerminalCard({
               }}
             >
               {cat.list.length} skills · 0 vulnerabilities
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -264,7 +264,7 @@ export function SkillsClient({ categories }: { categories: TCategory[] }) {
         </div>
 
         {/* Footer */}
-        <motion.p
+        <m.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -273,7 +273,7 @@ export function SkillsClient({ categories }: { categories: TCategory[] }) {
           style={{ color: 'var(--text-faint)' }}
         >
           {'// always learning · always shipping'}
-        </motion.p>
+        </m.p>
       </div>
     </section>
   );

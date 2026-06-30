@@ -1,7 +1,7 @@
 // ContactForm.tsx — textarea con altura fija cómoda, sin flex-1
 "use client";
 import { useActionState, useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { sendContactMessage } from '@/actions/contact';
 
@@ -26,7 +26,7 @@ export function ContactForm({ isInView }: { isInView: boolean }) {
   const showError = showResult && state?.success === false;
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, x: 30 }}
       animate={isInView ? { opacity: 1, x: 0 } : {}}
       transition={{ duration: 0.6, delay: 0.2 }}
@@ -126,6 +126,6 @@ export function ContactForm({ isInView }: { isInView: boolean }) {
           El mensaje llega directo a mi Gmail.
         </p>
       </form>
-    </motion.div>
+    </m.div>
   );
 }
