@@ -16,29 +16,26 @@ const ThemeContext = createContext<ThemeContextValue>({
   isDark: true,
 });
 
+// Lee el tema actual del DOM — el script inline ya lo aplicó,
+// así que esta función siempre devuelve el valor correcto
+function getInitialTheme(): Theme {
+  if (typeof window === 'undefined') return 'dark';
+  const attr = document.documentElement.getAttribute('data-theme');
+  return attr === 'light' ? 'light' : 'dark';
+}
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [mounted, setMounted] = useState(false);
-  const [theme, setTheme] = useState<Theme>('dark');
+  // Inicializamos leyendo el DOM en vez de asumir 'dark'
+  // Esto elimina el re-render innecesario del useEffect anterior
+  const [theme, setTheme] = useState<Theme>(getInitialTheme);
 
-  // Leer tema guardado solo en el cliente
+  // Sincronizamos DOM y localStorage cuando el tema cambia
   useEffect(() => {
-    const stored = localStorage.getItem('portfolio-theme') as Theme | null;
-    if (stored === 'dark' || stored === 'light') {
-      setTheme(stored);
-    } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-      setTheme('light');
-    }
-    setMounted(true);
-  }, []);
-
-  // Aplicar tema al DOM
-  useEffect(() => {
-    if (!mounted) return;
     const root = document.documentElement;
     root.setAttribute('data-theme', theme);
     root.classList.toggle('dark', theme === 'dark');
     localStorage.setItem('portfolio-theme', theme);
-  }, [theme, mounted]);
+  }, [theme]);
 
   const toggleTheme = () => setTheme(t => (t === 'dark' ? 'light' : 'dark'));
 

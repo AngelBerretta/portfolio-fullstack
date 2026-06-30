@@ -273,6 +273,26 @@ body {
 }
 
 /* ── Theme toggle button ─────────────────────────────────────────── */
+
+.theme-icon-dark,
+.theme-icon-light {
+  position: absolute;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Dark mode: mostramos Moon, ocultamos Sun */
+:root,
+[data-theme="dark"] {
+  .theme-icon-dark  { opacity: 1; transform: scale(1);    }
+  .theme-icon-light { opacity: 0; transform: scale(0.6);  }
+}
+
+/* Light mode: mostramos Sun, ocultamos Moon */
+[data-theme="light"] {
+  .theme-icon-dark  { opacity: 0; transform: scale(0.6);  }
+  .theme-icon-light { opacity: 1; transform: scale(1);    }
+}
+
 .theme-toggle {
   position: relative;
   width: 44px;
@@ -297,6 +317,16 @@ body {
   border-radius: 9999px;
   background: #3B82F6;
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Wrapper interno que contiene los dos íconos superpuestos */
+.theme-toggle-knob > span {
+  position: relative;
+  width: 10px;
+  height: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -722,5 +752,53 @@ body {
   }
   .scroll-cue-arrow {
     animation: none;
+  }
+}
+
+/* ── Reducir blurs en mobile para aliviar el compositor de GPU ──────────── */
+
+/* En mobile los blur-3xl del Hero son muy caros.
+   Los reducimos a blur-xl (radio menor = menos trabajo del GPU) */
+@media (max-width: 768px) {
+
+  /* Glow orbs del Hero */
+  #hero .blur-3xl {
+    filter: blur(40px); /* blur-3xl son 64px, bajamos a ~40px */
+  }
+
+  /* Glow orbs de ProjectsClient */
+  #projects .blur-3xl {
+    filter: blur(40px);
+  }
+
+  /* Glow orbs de SkillsClient */
+  #skills .blur-3xl {
+    filter: blur(40px);
+  }
+
+  /* El backdrop-blur del Navbar en mobile no lo tocamos —
+     es un solo elemento y es necesario para la legibilidad */
+
+  /* El backdrop-blur del botón BackToTop tampoco —
+     es un elemento pequeño y solo aparece después de scrollear */
+
+  /* Ocultamos los dos orbs decorativos más grandes del Hero
+     en pantallas muy pequeñas — el central de 600px y el de 320px.
+     El de 384px (top-left) lo mantenemos para no perder todo el ambiente */
+  #hero .w-\[600px\] {
+    display: none;
+  }
+  #hero .w-80 {
+    opacity: 0.5;
+  }
+}
+
+/* En pantallas muy pequeñas (< 480px) somos más agresivos */
+@media (max-width: 480px) {
+  #hero .blur-3xl,
+  #projects .blur-3xl,
+  #skills .blur-3xl {
+    filter: blur(24px);
+    opacity: 0.6;
   }
 }
