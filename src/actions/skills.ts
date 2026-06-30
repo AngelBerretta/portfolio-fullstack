@@ -5,6 +5,7 @@ import { prisma } from '@/lib/db';
 import { requireAuth } from '@/lib/require-auth';
 import { SkillSchema, ReorderSchema } from '@/lib/validations';
 import { ok, err, type ActionResult } from '@/lib/action-types';
+import { unstable_cache } from 'next/cache';
 
 function revalidateAll() {
   revalidatePath('/');
@@ -135,26 +136,46 @@ export async function reorderSkills(itemsJson: string): Promise<ActionResult> {
 
 // ─── READ HELPERS ─────────────────────────────────────────────────────────────
 
-export async function getAllSkills() {
+async function _getAllSkills() {
   return prisma.skill.findMany({
     orderBy: [{ category: 'asc' }, { order: 'asc' }],
   });
 }
 
+// getSkillById no lo cacheamos — solo se usa en el admin
 export async function getSkillById(id: string) {
   return prisma.skill.findUnique({ where: { id } });
 }
 
-/** Skills agrupadas por categoría — usado tanto por el admin como por el sitio público */
-export async function getSkillsByCategory() {
-  const skills = await getAllSkills();
-  return skills.reduce(
-    (acc, skill) => {
-      const cat = skill.category;
-      if (!acc[cat]) acc[cat] = [];
-      acc[cat].push(skill);
-      return acc;
-    },
-    {} as Record<string, typeof skills>
-  );
-}
+/**
+ * Versión cacheada de getAllSkills.
+ * Mismo mecanismo que getAllProjects — se invalida cuando
+ * revalidatePath('/') es llamado desde cualquier mutación del admin.
+ */
+export const getAllSkills = unstable_cache(
+  _getAllSkills,
+  ['all-skills'],
+  { tags: ['skills'] }
+);
+
+/**
+ * Skills agrupadas por categoría.
+ * También cacheada — llama a la versión cacheada de getAllSkills
+ * así ambas comparten el mismo cache entry.
+ */
+export const getSkillsByCategory = unstable_cache(
+  async () => {
+    const skills = await _getAllSkills();   // usa la query base, no la cacheada
+    return skills.reduce(
+      (acc, skill) => {
+        const cat = skill.category;
+        if (!acc[cat]) acc[cat] = [];
+        acc[cat].push(skill);
+        return acc;
+      },
+      {} as Record<string, typeof skills>
+    );
+  },
+  ['skills-by-category'],
+  { tags: ['skills'] }                     // mismo tag que getAllSkills
+);
