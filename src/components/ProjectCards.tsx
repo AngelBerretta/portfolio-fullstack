@@ -2,6 +2,7 @@
 import { useRef, useState } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { ExternalLink, Code2, Star, Clock, ChevronDown } from 'lucide-react';
+import Image from 'next/image';
 
 export interface ProjectCardData {
   id: string;
@@ -126,17 +127,20 @@ export function ProjectCard({
 
       {/* Imagen */}
       <div className="relative aspect-video overflow-hidden [background:var(--bg-surface)]">
-        <img
+        <Image
           src={project.image}
           alt={project.title}
-          className="w-full h-full object-cover object-top
+          fill                                  // ocupa el contenedor relativo
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="object-cover object-top
             group-hover:scale-105 transition-transform duration-500
             opacity-90 group-hover:opacity-100"
+          loading="lazy"                        // las cards están below-the-fold
         />
         {/* Gradiente base */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
 
-        {/* Overlay hover — desktop */}
+        {/* Overlay hover — desktop — queda exactamente igual */}
         <div className="hidden md:flex absolute inset-0 opacity-0 group-hover:opacity-100
           transition-opacity duration-300 items-center justify-center gap-3
           bg-gradient-to-t from-black/80 via-black/40 to-transparent"

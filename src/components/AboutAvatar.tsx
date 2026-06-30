@@ -1,5 +1,6 @@
 // AboutAvatar.tsx — columna izquierda de About: avatar, rings y trait pills
 import { motion } from 'framer-motion';
+import Image from 'next/image';           // ← agregamos este import
 import type { CSSProperties } from 'react';
 import { Coffee, Zap, Code2 } from 'lucide-react';
 
@@ -31,10 +32,13 @@ export function AboutAvatar({
 
         {/* Avatar */}
         <div className="relative w-72 h-72 md:w-80 md:h-80 rounded-3xl overflow-hidden border-2 border-blue-500/30 shadow-2xl shadow-blue-500/20 float-anim">
-          <img
+          <Image
             src={avatarUrl}
-            alt="Foto de perfil"
-            className="w-full h-full object-cover"
+            alt="Foto de perfil de Angel Berretta"
+            fill                          // ocupa el 100% del contenedor relativo
+            sizes="(max-width: 768px) 288px, 320px"
+            className="object-cover"
+            priority                      // es above-the-fold, la cargamos antes
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
         </div>
@@ -58,13 +62,6 @@ export function AboutAvatar({
       </div>
 
       {/* ── Trait pills ── */}
-      {/*
-        - Sacadas del posicionamiento absoluto → flujo normal
-        - mt-4 compensa el badge que sobresale (-bottom-4)
-        - flex-wrap para que en mobile bajen a la siguiente línea
-        - justify-center para centrarlas siempre
-        - w-full + px-2 evitan que se salgan del viewport
-      */}
       <div className="mt-4 flex flex-wrap justify-center gap-2 w-full px-2">
         {traits.map((t) => (
           <div
