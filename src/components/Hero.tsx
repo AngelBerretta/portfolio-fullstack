@@ -217,9 +217,10 @@ export default function Hero() {
         }
       >
         <span className="text-[10px] font-semibold tracking-[0.3em] uppercase">Scroll</span>
-        <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
+        {/* El bounce ahora es CSS puro — la clase scroll-cue-arrow está en globals.css */}
+        <div className="scroll-cue-arrow">
           <ArrowDown size={16} />
-        </motion.div>
+        </div>
       </motion.div>
     </section>
   );
