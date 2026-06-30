@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useScrollState } from '@/hooks/useScrollState';
+import { useActiveSection } from '@/hooks/useActiveSection';
 
 const sections = [
   { id: 'hero',     label: 'Inicio'    },
@@ -12,22 +13,8 @@ const sections = [
 ];
 
 export default function SideNav() {
-  const [active,  setActive]  = useState('hero');
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setVisible(window.scrollY > 200);
-      let current = 'hero';
-      for (const s of sections) {
-        const el = document.getElementById(s.id);
-        if (el && el.getBoundingClientRect().top <= 120) current = s.id;
-      }
-      setActive(current);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const { isSideNavVisible } = useScrollState()
+  const active = useActiveSection()
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
@@ -36,7 +23,7 @@ export default function SideNav() {
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: visible ? 1 : 0, x: visible ? 0 : 20 }}
+      animate={{ opacity: isSideNavVisible ? 1 : 0, x: isSideNavVisible ? 0 : 20 }}
       transition={{ duration: 0.4 }}
       className="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col gap-3"
     >
