@@ -6,7 +6,7 @@ import { authConfig } from './auth.config';
 import { z } from 'zod';
 
 const LoginSchema = z.object({
-  email: z.string().email(),
+  email: z.email(),
   password: z.string().min(6),
 });
 
