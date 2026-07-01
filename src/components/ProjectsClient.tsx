@@ -4,7 +4,7 @@
 import { useRef, useState } from 'react';
 import { m, useInView, AnimatePresence } from 'framer-motion';
 import { Layers, Code2, Layout, Globe, Clock } from 'lucide-react';
-import { ProjectCard, UpcomingCard, type ProjectCardData } from './ProjectCards';
+import { ProjectCard, UpcomingCard, type ProjectCardData } from './projects/index';
 
 type CategoryTab = { id: string; label: string };
 
