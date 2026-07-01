@@ -45,29 +45,25 @@ export default function Hero() {
       id="hero"
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-grid"
     >
-      {/* Glow orbs */}
+      {/* Glow orbs — el tercero (600px, el más caro de rasterizar) se oculta en mobile */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-sky-500/20 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-3xl" />
+        <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-3xl" />
       </div>
 
       <HeroParticles />
 
       <div className="relative z-10 max-w-6xl mx-auto px-6 py-28 flex flex-col items-center text-center">
 
-        {/* Name */}
-        <m.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1 }}
-          className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight mb-5 leading-none [color:var(--text-primary)]"
-        >
+        {/* Name — sin framer-motion: es el elemento LCP, pinta instantáneo en vez de
+            esperar a que hidrate React + corra la animación de opacidad */}
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight mb-5 leading-none [color:var(--text-primary)]">
           Angel{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-400 to-cyan-300 glow-text">
             Berretta
           </span>
-        </m.h1>
+        </h1>
 
         {/* Typewriter */}
         <m.div
