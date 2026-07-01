@@ -28,7 +28,7 @@ export const ProjectSchema = z.object({
     .string()
     .min(1, 'La URL del código es requerida')
     .refine(
-      (v) => v === '#' || z.string().url().safeParse(v).success,
+      (v) => v === '#' || z.url().safeParse(v).success,
       { message: 'Ingresá una URL válida o # si no está disponible' }
     ),
 
@@ -36,7 +36,7 @@ export const ProjectSchema = z.object({
     .string()
     .min(1, 'La URL de la demo es requerida')
     .refine(
-      (v) => v === '#' || z.string().url().safeParse(v).success,
+      (v) => v === '#' || z.url().safeParse(v).success,
       { message: 'Ingresá una URL válida o # si no está disponible' }
     ),
 
@@ -83,7 +83,6 @@ export const SkillSchema = z
     level: z.coerce.number().int().min(0).max(100).default(0),
 
     iconUrl: z
-      .string()
       .url('Ingresá una URL válida')
       .optional()
       .or(z.literal(''))
@@ -170,7 +169,9 @@ export const ContactSchema = z.object({
   email: z
     .string({ error: 'El email es requerido' })
     .min(1, 'El email es requerido')
-    .email('Ingresá un email válido'),
+    .refine((v) => z.email().safeParse(v).success, {
+      message: 'Ingresá un email válido',
+    }),
 
   subject: z.string().max(150, 'Máximo 150 caracteres').optional(),
 
@@ -186,7 +187,7 @@ export type ContactInput = z.infer<typeof ContactSchema>;
 
 export const ReorderSchema = z.array(
   z.object({
-    id: z.string().cuid(),
+    id: z.string().regex(/^c[a-z0-9]+$/, 'ID inválido'),
     order: z.number().int(),
   })
 );
