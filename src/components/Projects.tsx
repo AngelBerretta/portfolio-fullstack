@@ -4,7 +4,7 @@
 import { getAllProjects } from '@/actions/projects';
 import { PROJECT_FILTER_TABS } from '@/lib/constants';
 import { ProjectsClient } from './ProjectsClient';
-import type { ProjectCardData } from './ProjectCards';
+import type { ProjectCardData } from './projects/index';
 
 export default async function Projects() {
   const allProjects = await getAllProjects();

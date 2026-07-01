@@ -2,7 +2,7 @@
 // las agrupa por categoría con la metadata visual (accent color, path de
 // terminal) y le pasa todo resuelto a SkillsClient.
 import { getSkillsByCategory } from '@/actions/skills';
-import { SkillsClient, type TCategory } from './SkillsClient';
+import { SkillsClient, type TCategory } from './skills/index';
 
 // Metadata visual por categoría — no vive en la DB, es la "piel" de cada
 // terminal. El id debe coincidir con el campo `category` de cada Skill.

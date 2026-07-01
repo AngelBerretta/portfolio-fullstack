@@ -153,7 +153,7 @@ export function SkillForm({
         ) : (
           <Field
             label="Nombre de ícono Lucide"
-            hint={`Para conceptos sin logo (ej: "API REST"). Disponibles ahora mismo: ${AVAILABLE_FALLBACK_ICONS.join(', ')}. Otro nombre requiere agregarlo también en SkillsClient.tsx.`}
+            hint={`Para conceptos sin logo (ej: "API REST"). Disponibles ahora mismo: ${AVAILABLE_FALLBACK_ICONS.join(', ')}. Otro nombre requiere agregarlo también en components/skills/SkillIcon.tsx.`}
           >
             <select
               name="iconName"
