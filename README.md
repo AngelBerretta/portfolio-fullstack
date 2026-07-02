@@ -204,7 +204,7 @@ npx prisma migrate dev   # aplicar cambios de schema
 
 - [ ] Tests automatizados (Vitest + Testing Library)
 - [ ] Internacionalización (ES/EN)
-- [ ] Analytics propio sin depender de cookies de terceros
+- [x] Analytics propio sin depender de cookies de terceros
 - [ ] Más proyectos cargados desde el panel de admin
 
 ---
