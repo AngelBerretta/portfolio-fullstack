@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { MotionProvider } from "@/components/MotionProvider";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -76,6 +77,7 @@ export default function RootLayout({
         <MotionProvider>
           {children}
         </MotionProvider>
+        <Analytics />
       </body>
     </html>
   );
