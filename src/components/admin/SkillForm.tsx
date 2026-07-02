@@ -7,24 +7,29 @@ import { SKILL_CATEGORIES, AVAILABLE_FALLBACK_ICONS } from '@/lib/constants';
 import type { ActionResult } from '@/lib/action-types';
 import type { Skill } from '@prisma/client';
 
-export function SkillForm({
+export function SkillForm<T = undefined>({
   skill,
   action,
 }: {
   skill?: Skill;
-  action: (
-    prevState: any,
+  action(
+    prevState: ActionResult<T> | null,
     formData: FormData
-  ) => Promise<any>;
+  ): Promise<ActionResult<T>>;
 }) {
   const router = useRouter();
   const [state, formAction] = useActionState(action, null);
 
-  // El front público necesita SIEMPRE un ícono: o una URL (devicon, etc.)
-  // o un nombre de ícono Lucide como fallback. Este toggle decide cuál mostrar.
+  const [name, setName] = useState(skill?.name ?? '');
+  const [description, setDescription] = useState(skill?.description ?? '');
+  const [category, setCategory] = useState(skill?.category ?? 'frontend');
+  const [order, setOrder] = useState(skill?.order ?? 0);
+
   const [iconType, setIconType] = useState<'url' | 'lucide'>(
     skill?.iconName ? 'lucide' : 'url'
   );
+  const [iconUrl, setIconUrl] = useState(skill?.iconUrl ?? '');
+  const [iconName, setIconName] = useState(skill?.iconName ?? AVAILABLE_FALLBACK_ICONS[0]);
   const [invertIcon, setInvertIcon] = useState(skill?.invertIcon ?? false);
 
   useEffect(() => {
@@ -50,7 +55,8 @@ export function SkillForm({
       >
         <input
           name="name"
-          defaultValue={skill?.name}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           required
           className={inputClass}
           placeholder="react.js"
@@ -64,7 +70,8 @@ export function SkillForm({
       >
         <textarea
           name="description"
-          defaultValue={skill?.description ?? ''}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
           required
           rows={2}
           maxLength={150}
@@ -75,7 +82,12 @@ export function SkillForm({
 
       <div className="grid grid-cols-2 gap-4">
         <Field label="Categoría" error={fieldErrors?.category?.[0]}>
-          <select name="category" defaultValue={skill?.category ?? 'frontend'} className={inputClass}>
+          <select
+            name="category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className={inputClass}
+          >
             {SKILL_CATEGORIES.map((c) => (
               <option key={c.value} value={c.value}>
                 {c.label}
@@ -88,13 +100,13 @@ export function SkillForm({
           <input
             name="order"
             type="number"
-            defaultValue={skill?.order ?? 0}
+            value={order}
+            onChange={(e) => setOrder(Number(e.target.value))}
             className={inputClass}
           />
         </Field>
       </div>
 
-      {/* ─── Ícono ────────────────────────────────────────────────────────── */}
       <div className="space-y-3 p-4 bg-gray-800/50 border border-gray-700 rounded-lg">
         <p className="text-sm font-medium text-gray-300">Ícono</p>
 
@@ -144,7 +156,8 @@ export function SkillForm({
           >
             <input
               name="iconUrl"
-              defaultValue={skill?.iconUrl ?? ''}
+              value={iconUrl}
+              onChange={(e) => setIconUrl(e.target.value)}
               className={inputClass}
               placeholder="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg"
             />
@@ -157,12 +170,13 @@ export function SkillForm({
           >
             <select
               name="iconName"
-              defaultValue={skill?.iconName ?? AVAILABLE_FALLBACK_ICONS[0]}
+              value={iconName}
+              onChange={(e) => setIconName(e.target.value)}
               className={inputClass}
             >
-              {AVAILABLE_FALLBACK_ICONS.map((name) => (
-                <option key={name} value={name}>
-                  {name}
+              {AVAILABLE_FALLBACK_ICONS.map((n) => (
+                <option key={n} value={n}>
+                  {n}
                 </option>
               ))}
             </select>

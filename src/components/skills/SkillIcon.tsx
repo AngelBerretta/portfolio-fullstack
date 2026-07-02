@@ -1,9 +1,6 @@
 import { Code2, Network, MonitorSmartphone, Palette } from 'lucide-react';
 import type { TSkill } from './types';
 
-// Registro de íconos Lucide disponibles como fallback (cuando la skill no
-// tiene iconUrl). Si agregás una skill nueva con un iconName distinto acá,
-// agregalo también a este mapa y a AVAILABLE_FALLBACK_ICONS en lib/constants.ts.
 const FALLBACK_ICONS: Record<string, React.ComponentType<{ size?: number }>> = {
   Network,
   MonitorSmartphone,
@@ -13,6 +10,7 @@ const FALLBACK_ICONS: Record<string, React.ComponentType<{ size?: number }>> = {
 export function SkillIcon({ skill, hex }: { skill: TSkill; hex: string }) {
   if (skill.iconUrl) {
     return (
+      // eslint-disable-next-line @next/next/no-img-element -- iconUrl es una URL externa arbitraria cargada desde el admin (devicon.dev u otros CDNs); no podemos precomputar remotePatterns fijos para next/image
       <img
         src={skill.iconUrl}
         alt=""
@@ -24,9 +22,6 @@ export function SkillIcon({ skill, hex }: { skill: TSkill; hex: string }) {
     );
   }
 
-  // Antes esto siempre caía a Code2 — ahora primero busca el ícono real
-  // por iconName (Network, MonitorSmartphone, Palette) y solo si no hay
-  // ninguno coincidente usa el genérico como último recurso.
   const FallbackIcon = skill.iconName ? FALLBACK_ICONS[skill.iconName] : undefined;
 
   return (
