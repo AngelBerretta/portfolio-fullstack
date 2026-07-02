@@ -213,7 +213,7 @@ npx prisma migrate dev   # aplicar cambios de schema
 
 - **GitHub:** [@AngelBerretta](https://github.com/AngelBerretta)
 - **LinkedIn:** [angelberretta](https://linkedin.com/in/angelberretta)
-- **Email:** a través del [formulario de contacto](https://angelberretta.dev/#contact) del sitio
+- **Email:** a través del [formulario de contacto](https://portfolio-fullstack-angel.vercel.app/#contact) del sitio
 
 ---
 
