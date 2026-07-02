@@ -13,6 +13,8 @@ export function ImageUploader({
   initialUrl,
   folder,
   aspectRatio = 'aspect-video',
+  disabled = false,
+  disabledMessage,
 }: {
   /** Nombre del input hidden — así FormData.get(name) trae la URL final */
   name: string;
@@ -21,6 +23,12 @@ export function ImageUploader({
   folder: string;
   /** Clase de Tailwind para la proporción del preview, ej: "aspect-square" */
   aspectRatio?: string;
+  /** Cuando es true, se deshabilita la interacción (subir/borrar) pero
+   *  se conserva el valor actual — útil cuando la imagen es opcional
+   *  según otro campo del formulario. */
+  disabled?: boolean;
+  /** Mensaje mostrado sobre el preview cuando disabled es true. */
+  disabledMessage?: string;
 }) {
   const [url, setUrl] = useState(initialUrl ?? '');
   const [isUploading, setIsUploading] = useState(false);
@@ -53,8 +61,6 @@ export function ImageUploader({
 
       setUrl(newBlob.url);
 
-      // Borramos la imagen anterior en segundo plano — no bloqueamos la UI
-      // esperando esto, y si falla no afecta el formulario.
       if (previousUrl && previousUrl !== newBlob.url) {
         void deleteBlobImage(previousUrl);
       }
@@ -74,25 +80,31 @@ export function ImageUploader({
 
   return (
     <div className="space-y-2">
-      {/* Esto es lo que el formulario realmente envía */}
+      {/* Esto es lo que el formulario realmente envía — se mantiene
+          siempre montado, incluso cuando disabled, para no perder
+          la imagen ya guardada. */}
       <input type="hidden" name={name} value={url} />
 
       <div
-        className={`relative ${aspectRatio} w-full max-w-sm rounded-lg overflow-hidden border border-gray-700 bg-gray-800 group`}
+        className={`relative ${aspectRatio} w-full max-w-sm rounded-lg overflow-hidden border border-gray-700 bg-gray-800 group transition-opacity ${
+          disabled ? 'opacity-60' : ''
+        }`}
       >
         {url ? (
           <>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={url} alt="" className="w-full h-full object-cover" />
-            <button
-              type="button"
-              onClick={handleRemove}
-              disabled={isUploading}
-              className="absolute top-2 right-2 p-1.5 bg-black/60 hover:bg-red-600 text-white rounded-lg opacity-0 group-hover:opacity-100 transition disabled:opacity-50"
-              aria-label="Quitar imagen"
-            >
-              <X className="w-4 h-4" />
-            </button>
+            {!disabled && (
+              <button
+                type="button"
+                onClick={handleRemove}
+                disabled={isUploading}
+                className="absolute top-2 right-2 p-1.5 bg-black/60 hover:bg-red-600 text-white rounded-lg opacity-0 group-hover:opacity-100 transition disabled:opacity-50"
+                aria-label="Quitar imagen"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
           </>
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center text-gray-500 text-sm gap-2">
@@ -107,27 +119,40 @@ export function ImageUploader({
             Subiendo... {progress}%
           </div>
         )}
+
+        {disabled && !isUploading && (
+          <div className="absolute inset-0 bg-black/60 flex items-center justify-center p-4">
+            <p className="text-xs text-gray-200 text-center leading-relaxed">
+              {disabledMessage ??
+                'No hace falta imagen para proyectos en construcción o próximamente.'}
+            </p>
+          </div>
+        )}
       </div>
 
-      <input
-        ref={inputRef}
-        type="file"
-        accept={ACCEPTED_TYPES.join(',')}
-        disabled={isUploading}
-        onChange={(e) => {
-          const file = e.target.files?.[0];
-          if (file) handleFile(file);
-        }}
-        className="block text-sm text-gray-400 file:mr-3 file:px-3 file:py-1.5 file:rounded-lg file:border-0 file:bg-gray-800 file:text-gray-300 file:text-sm hover:file:bg-gray-700 file:cursor-pointer cursor-pointer disabled:opacity-50"
-      />
+      {!disabled && (
+        <>
+          <input
+            ref={inputRef}
+            type="file"
+            accept={ACCEPTED_TYPES.join(',')}
+            disabled={isUploading}
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) handleFile(file);
+            }}
+            className="block text-sm text-gray-400 file:mr-3 file:px-3 file:py-1.5 file:rounded-lg file:border-0 file:bg-gray-800 file:text-gray-300 file:text-sm hover:file:bg-gray-700 file:cursor-pointer cursor-pointer disabled:opacity-50"
+          />
 
-      {error && (
-        <p className="flex items-center gap-1.5 text-xs text-red-400">
-          <AlertCircle className="w-3.5 h-3.5" />
-          {error}
-        </p>
+          {error && (
+            <p className="flex items-center gap-1.5 text-xs text-red-400">
+              <AlertCircle className="w-3.5 h-3.5" />
+              {error}
+            </p>
+          )}
+          <p className="text-xs text-gray-600">JPG, PNG o WebP — máx {MAX_SIZE_MB}MB.</p>
+        </>
       )}
-      <p className="text-xs text-gray-600">JPG, PNG o WebP — máx {MAX_SIZE_MB}MB.</p>
     </div>
   );
 }
