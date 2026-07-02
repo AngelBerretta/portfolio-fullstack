@@ -100,6 +100,7 @@ export function SkillForm<T = undefined>({
           <input
             name="order"
             type="number"
+            min={0}
             value={order}
             onChange={(e) => setOrder(Number(e.target.value))}
             className={inputClass}

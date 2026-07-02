@@ -138,7 +138,7 @@ export async function reorderSkills(itemsJson: string): Promise<ActionResult> {
 
 async function _getAllSkills() {
   return prisma.skill.findMany({
-    orderBy: [{ category: 'asc' }, { order: 'asc' }],
+    orderBy: [{ category: 'asc' }, { order: 'asc' }, { createdAt: 'asc' }],
   });
 }
 
@@ -165,7 +165,7 @@ export const getAllSkills = unstable_cache(
  */
 export const getSkillsByCategory = unstable_cache(
   async () => {
-    const skills = await _getAllSkills();   // usa la query base, no la cacheada
+    const skills = await getAllSkills();   // usa la query base, no la cacheada
     return skills.reduce(
       (acc, skill) => {
         const cat = skill.category;
