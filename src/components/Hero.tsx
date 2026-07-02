@@ -1,7 +1,7 @@
 "use client";
 
 import { m } from 'framer-motion';
-import { Mail, ArrowDown, Sparkles } from 'lucide-react';
+import { Mail, ArrowDown } from 'lucide-react';
 import { HeroParticles } from './HeroParticles';
 import { useTypewriter } from '../hooks/useTypewriter';
 import { ArgentinaFlag, GitHubIcon, LinkedInIcon } from './icons';

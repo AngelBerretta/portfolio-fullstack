@@ -1,4 +1,3 @@
-// useTypewriter.ts — hook para efecto de escritura animada
 import { useEffect, useState } from 'react';
 
 export function useTypewriter(words: string[], speed = 80, pause = 2000) {
@@ -24,8 +23,13 @@ export function useTypewriter(words: string[], speed = 80, pause = 2000) {
         setCharIdx((c) => c - 1);
       }, speed / 2.5);
     } else {
-      setDeleting(false);
-      setWordIdx((i) => (i + 1) % words.length);
+      // Transición inmediata a la siguiente palabra. La envolvemos en un
+      // setTimeout(0) para no llamar setState de forma sincrónica dentro
+      // del efecto — el comportamiento visual es idéntico.
+      timeout = setTimeout(() => {
+        setDeleting(false);
+        setWordIdx((i) => (i + 1) % words.length);
+      }, 0);
     }
 
     return () => clearTimeout(timeout);
