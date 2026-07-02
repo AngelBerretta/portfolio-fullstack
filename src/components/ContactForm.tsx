@@ -1,4 +1,3 @@
-// ContactForm.tsx — textarea con altura fija cómoda, sin flex-1
 "use client";
 import { useActionState, useEffect, useRef, useState } from 'react';
 import { m } from 'framer-motion';
@@ -11,19 +10,18 @@ const inputClass =
 export function ContactForm({ isInView }: { isInView: boolean }) {
   const formRef = useRef<HTMLFormElement>(null);
   const [state, formAction, isPending] = useActionState(sendContactMessage, null);
-  const [showResult, setShowResult] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
     if (!state) return;
-    setShowResult(true);
     if (state.success) formRef.current?.reset();
-    const timeout = setTimeout(() => setShowResult(false), 5000);
+    const timeout = setTimeout(() => setDismissed(true), 5000);
     return () => clearTimeout(timeout);
   }, [state]);
 
   const fieldErrors = state?.success === false ? state.fieldErrors : undefined;
-  const showSuccess = showResult && state?.success === true;
-  const showError = showResult && state?.success === false;
+  const showSuccess = !dismissed && state?.success === true;
+  const showError = !dismissed && state?.success === false;
 
   return (
     <m.div
@@ -34,7 +32,12 @@ export function ContactForm({ isInView }: { isInView: boolean }) {
     >
       <h3 className="font-bold text-lg mb-6 [color:var(--text-primary)]">Enviame un mensaje</h3>
 
-      <form ref={formRef} action={formAction} className="space-y-4">
+      <form
+        ref={formRef}
+        action={formAction}
+        onSubmit={() => setDismissed(false)}
+        className="space-y-4"
+      >
         {/* Honeypot */}
         <input
           type="text"
@@ -87,7 +90,6 @@ export function ContactForm({ isInView }: { isInView: boolean }) {
 
         <div>
           <label className="block text-xs font-medium mb-2 [color:var(--text-muted)]">Mensaje</label>
-          {/* ── altura fija cómoda: ni muy chico ni exagerado ── */}
           <textarea
             name="message"
             rows={6}
