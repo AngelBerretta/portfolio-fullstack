@@ -12,26 +12,32 @@ import type { Project, Tag } from '@prisma/client';
 
 type ProjectWithTags = Project & { tags: Tag[] };
 
-export function ProjectForm({
+export function ProjectForm<T = undefined>({
   project,
   allTags,
   action,
 }: {
   project?: ProjectWithTags;
   allTags: string[];
-  action: (
-    prevState: any,
+  action(
+    prevState: ActionResult<T> | null,
     formData: FormData
-  ) => Promise<any>;
+  ): Promise<ActionResult<T>>;
 }) {
   const router = useRouter();
   const [state, formAction] = useActionState(action, null);
 
   const [title, setTitle] = useState(project?.title ?? '');
   const [slug, setSlug] = useState(project?.slug ?? '');
-  const [slugTouched, setSlugTouched] = useState(!!project); // si edita, no auto-generar
+  const [slugTouched, setSlugTouched] = useState(!!project);
+  const [description, setDescription] = useState(project?.description ?? '');
+  const [codeUrl, setCodeUrl] = useState(project?.codeUrl ?? '');
+  const [demoUrl, setDemoUrl] = useState(project?.demoUrl ?? '');
   const [category, setCategory] = useState(project?.category ?? 'frontend');
   const [status, setStatus] = useState(project?.status ?? '');
+  const [statusLabel, setStatusLabel] = useState(project?.statusLabel ?? '');
+  const [statusLabelTouched, setStatusLabelTouched] = useState(!!project?.statusLabel);
+  const [order, setOrder] = useState(project?.order ?? 0);
   const [featured, setFeatured] = useState(project?.featured ?? false);
 
   useEffect(() => {
@@ -47,6 +53,15 @@ export function ProjectForm({
     }
   }
 
+  // Cuando cambia el status, si el usuario no escribió un statusLabel propio,
+  // sugerimos uno por defecto (mismo comportamiento que tenías antes)
+  function handleStatusChange(value: string) {
+    setStatus(value);
+    if (value && !statusLabelTouched) {
+      setStatusLabel(value === 'in-progress' ? 'En construcción' : 'Próximamente');
+    }
+  }
+
   const fieldErrors = state?.success === false ? state.fieldErrors : undefined;
 
   return (
@@ -57,7 +72,6 @@ export function ProjectForm({
         </p>
       )}
 
-      {/* Título + slug */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Field label="Título" error={fieldErrors?.title?.[0]}>
           <input
@@ -90,11 +104,11 @@ export function ProjectForm({
         </Field>
       </div>
 
-      {/* Descripción */}
       <Field label="Descripción" error={fieldErrors?.description?.[0]}>
         <textarea
           name="description"
-          defaultValue={project?.description}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
           required
           rows={4}
           className={inputClass}
@@ -102,17 +116,27 @@ export function ProjectForm({
         />
       </Field>
 
-      {/* Imagen */}
-      <Field label="Imagen del proyecto" error={fieldErrors?.imageUrl?.[0]}>
-        <ImageUploader name="imageUrl" initialUrl={project?.imageUrl} folder="projects" aspectRatio="aspect-video" />
+      <Field
+        label="Imagen del proyecto"
+        hint={status ? undefined : undefined}
+        error={fieldErrors?.imageUrl?.[0]}
+      >
+        <ImageUploader
+          name="imageUrl"
+          initialUrl={project?.imageUrl}
+          folder="projects"
+          aspectRatio="aspect-video"
+          disabled={!!status}
+          disabledMessage="No hace falta imagen para proyectos en construcción o próximamente."
+        />
       </Field>
 
-      {/* URLs */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Field label="URL del código (GitHub)" error={fieldErrors?.codeUrl?.[0]}>
           <input
             name="codeUrl"
-            defaultValue={project?.codeUrl}
+            value={codeUrl}
+            onChange={(e) => setCodeUrl(e.target.value)}
             required
             className={inputClass}
             placeholder="https://github.com/usuario/repo"
@@ -122,7 +146,8 @@ export function ProjectForm({
         <Field label="URL de la demo" hint="Usá # si todavía no tiene demo pública." error={fieldErrors?.demoUrl?.[0]}>
           <input
             name="demoUrl"
-            defaultValue={project?.demoUrl}
+            value={demoUrl}
+            onChange={(e) => setDemoUrl(e.target.value)}
             required
             className={inputClass}
             placeholder="https://mi-proyecto.vercel.app"
@@ -130,7 +155,6 @@ export function ProjectForm({
         </Field>
       </div>
 
-      {/* Categoría + estado */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Field label="Categoría" error={fieldErrors?.category?.[0]}>
           <select
@@ -151,7 +175,7 @@ export function ProjectForm({
           <select
             name="status"
             value={status ?? ''}
-            onChange={(e) => setStatus(e.target.value)}
+            onChange={(e) => handleStatusChange(e.target.value)}
             className={inputClass}
           >
             {PROJECT_STATUSES.map((s) => (
@@ -167,14 +191,17 @@ export function ProjectForm({
         <Field label="Texto del badge de estado" error={fieldErrors?.statusLabel?.[0]}>
           <input
             name="statusLabel"
-            defaultValue={project?.statusLabel ?? (status === 'in-progress' ? 'En construcción' : 'Próximamente')}
+            value={statusLabel}
+            onChange={(e) => {
+              setStatusLabelTouched(true);
+              setStatusLabel(e.target.value);
+            }}
             className={inputClass}
             placeholder="En construcción"
           />
         </Field>
       )}
 
-      {/* Tags */}
       <Field
         label="Tecnologías (tags)"
         hint="Presioná Enter para agregar. Si el tag no existe, se crea automáticamente."
@@ -187,7 +214,6 @@ export function ProjectForm({
         />
       </Field>
 
-      {/* Featured + orden */}
       <div className="flex items-center gap-8">
         <label className="flex items-center gap-2.5 cursor-pointer select-none">
           <input
@@ -196,7 +222,6 @@ export function ProjectForm({
             onChange={(e) => setFeatured(e.target.checked)}
             className="w-4 h-4 rounded border-gray-700 bg-gray-800 text-blue-600 focus:ring-blue-500 focus:ring-offset-gray-900"
           />
-          {/* checkbox real envía "on"/"off" — normalizamos a true/false explícito */}
           <input type="hidden" name="featured" value={featured ? 'true' : 'false'} />
           <span className="text-sm text-gray-300">Destacado en la home</span>
         </label>
@@ -205,7 +230,8 @@ export function ProjectForm({
           <input
             name="order"
             type="number"
-            defaultValue={project?.order ?? 0}
+            value={order}
+            onChange={(e) => setOrder(Number(e.target.value))}
             className={`${inputClass} w-24`}
           />
         </Field>
@@ -224,8 +250,6 @@ export function ProjectForm({
     </form>
   );
 }
-
-// ─── Sub-componentes de UI ────────────────────────────────────────────────────
 
 const inputClass =
   'w-full px-3 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition';

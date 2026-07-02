@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { m, useInView } from 'framer-motion';
-import { Clock } from 'lucide-react';
+import { Clock, Hammer } from 'lucide-react';
 import { upcomingConfig } from './upcoming-config';
 import { TagList } from './TagList';
 import type { ProjectCardData } from './types';
@@ -21,6 +21,16 @@ export function UpcomingCard({
     glowColor: 'rgba(59, 130, 246, 0.3)',
     accentColor: '#3B82F6',
   };
+
+  const isComingSoon = project.status === 'coming-soon';
+
+  // El pill usa el texto cargado en el admin (statusLabel); si no hay,
+  // cae a un default según el status.
+  const pillLabel = project.statusLabel ?? (isComingSoon ? 'Próximamente' : 'En desarrollo');
+
+  // Texto e ícono del footer también varían según el status.
+  const footerText = isComingSoon ? 'Disponible próximamente' : 'En desarrollo activo';
+  const FooterIcon = isComingSoon ? Clock : Hammer;
 
   return (
     <m.div
@@ -71,7 +81,7 @@ export function UpcomingCard({
             </span>
           </m.div>
 
-          {/* Status pill */}
+          {/* Status pill — ahora usa el statusLabel real del proyecto */}
           <span className="text-[10px] font-bold tracking-widest uppercase
             px-3 py-1 rounded-full border flex items-center gap-1.5"
             style={{
@@ -82,7 +92,7 @@ export function UpcomingCard({
           >
             <span className="w-1.5 h-1.5 rounded-full animate-pulse"
               style={{ background: cfg.accentColor }} />
-            En desarrollo
+            {pillLabel}
           </span>
         </div>
       </div>
@@ -110,12 +120,12 @@ export function UpcomingCard({
 
         <TagList tags={project.tags} />
 
-        {/* Footer */}
+        {/* Footer — ícono y texto según status */}
         <div className="flex items-center gap-2 pt-3 border-t text-xs
           [border-color:var(--border-subtle)] [color:var(--text-faint)]"
         >
-          <Clock size={12} className="text-amber-500 shrink-0" />
-          <span>Disponible próximamente</span>
+          <FooterIcon size={12} className="text-amber-500 shrink-0" />
+          <span>{footerText}</span>
         </div>
 
       </div>
