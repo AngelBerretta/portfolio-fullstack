@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useTransition } from 'react';
+import { useState, useTransition, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowUp, ArrowDown, Pencil, Star } from 'lucide-react';
 import { DeleteButton } from './DeleteButton';
@@ -21,6 +21,10 @@ export function ProjectsTable({ projects: initial }: { projects: ProjectWithTags
   const [projects, setProjects] = useState(initial);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+
+  useEffect(() => {
+    setProjects(initial);
+  }, [initial]);
 
   function move(index: number, direction: -1 | 1) {
     const targetIndex = index + direction;

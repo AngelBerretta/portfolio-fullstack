@@ -17,21 +17,21 @@ export function ProfileForm({
 }) {
   const router = useRouter();
   const [state, formAction] = useActionState(action, null);
-  const [showSaved, setShowSaved] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
     if (state?.success) {
-      setShowSaved(true);
       router.refresh();
-      const timeout = setTimeout(() => setShowSaved(false), 2500);
+      const timeout = setTimeout(() => setDismissed(true), 2500);
       return () => clearTimeout(timeout);
     }
   }, [state, router]);
 
   const fieldErrors = state?.success === false ? state.fieldErrors : undefined;
+  const showSaved = state?.success === true && !dismissed;
 
   return (
-    <form action={formAction} className="space-y-6">
+    <form action={formAction} onSubmit={() => setDismissed(false)} className="space-y-6">
       {state?.success === false && state.error && (
         <p className="text-sm text-red-400 bg-red-950/50 px-4 py-3 rounded-lg border border-red-900">
           {state.error}
