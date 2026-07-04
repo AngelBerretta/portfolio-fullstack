@@ -1,4 +1,5 @@
 import { ThemeProvider } from "@/context/ThemeContext";
+import { ScrollProvider } from "@/context/ScrollContext";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
@@ -23,18 +24,20 @@ export const revalidate = 3600; // 1 hora en segundos
 export default function Home() {
   return (
     <ThemeProvider>
-      <ScrollProgress />
-      <Navbar />
-      <SideNav />
-      <main>
-        <Hero />
-        <About />
-        <Skills />
-        <Projects />
-        <Contact />
-      </main>
-      <Footer />
-      <BackToTop />
+      <ScrollProvider>
+        <ScrollProgress />
+        <Navbar />
+        <SideNav />
+        <main>
+          <Hero />
+          <About />
+          <Skills />
+          <Projects />
+          <Contact />
+        </main>
+        <Footer />
+        <BackToTop />
+      </ScrollProvider>
     </ThemeProvider>
   );
 }
