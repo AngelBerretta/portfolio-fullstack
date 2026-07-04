@@ -10,7 +10,15 @@ export function TerminalCard({
   cat: TCategory; enterDelay?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  // Dispara la animación de entrada una sola vez, la primera vez que la card
+  // aparece en pantalla, y se queda en `true` para siempre.
   const isInView = useInView(ref, { once: true, margin: '-40px' });
+  // Sigue la visibilidad real en cada momento (sin `once`), para poder
+  // pausar la animación infinita del "term-sweep" (9s linear infinite)
+  // en cuanto la card sale de pantalla, en vez de dejarla corriendo en
+  // el compositor todo el tiempo que el usuario esté leyendo otra parte
+  // de la página.
+  const isVisible = useInView(ref, { margin: '200px 0px' });
   const [expandedSkill, setExpandedSkill] = useState<string | null>(null);
 
   return (
@@ -19,7 +27,7 @@ export function TerminalCard({
       initial={{ opacity: 0, y: 24 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.45, delay: enterDelay, ease: [0.22, 1, 0.36, 1] }}
-      className="term-card relative flex flex-col rounded-xl overflow-hidden font-mono"
+      className={`term-card relative flex flex-col rounded-xl overflow-hidden font-mono ${isVisible ? 'term-card--active' : ''}`}
     >
       {/* Title bar */}
       <div className="term-titlebar flex items-center px-4 py-[10px] border-b flex-shrink-0">

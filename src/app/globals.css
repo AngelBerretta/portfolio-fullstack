@@ -616,8 +616,14 @@ body {
     transparent              100%
   );
   animation: term-sweep 9s linear infinite;
+  /* Pausada por defecto: solo corre mientras la card está visible en
+     pantalla (ver .term-card--active, controlado por useInView en
+     TerminalCard.tsx). Evita que el compositor siga animando esta capa
+     9s en loop mientras el usuario está leyendo otra sección. */
+  animation-play-state: paused;
 }
 [data-theme="light"] .term-sweep { display: none; }
+.term-card--active .term-sweep { animation-play-state: running; }
 .term-card:nth-child(2) .term-sweep { animation-delay: -3s; }
 .term-card:nth-child(3) .term-sweep { animation-delay: -6s; }
 
@@ -776,4 +782,21 @@ body {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* ── Skip de renderizado para secciones fuera de pantalla ──────────────
+   content-visibility: auto le dice al navegador que NO calcule estilo,
+   layout ni paint del contenido de la sección mientras esté lejos del
+   viewport (no visible ni por scrollear pronto). En vez de adivinar la
+   altura real, usamos "auto Npx": el navegador arranca reservando ese
+   alto como placeholder y, apenas mide la sección una vez, recuerda el
+   alto real para las próximas veces que salga/entre de pantalla — así
+   evitamos saltos de layout (CLS) sin tener que hardcodear la altura
+   exacta de cada sección.
+   Soportado en navegadores Chromium desde hace tiempo y en Safari
+   (WebKit) desde Safari 18; en navegadores que no lo soportan la
+   propiedad simplemente se ignora, sin romper nada. */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto var(--cv-size, 800px);
 }
