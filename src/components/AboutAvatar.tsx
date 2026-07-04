@@ -38,7 +38,12 @@ export function AboutAvatar({
             fill                          // ocupa el 100% del contenedor relativo
             sizes="(max-width: 768px) 288px, 320px"
             className="object-cover"
-            priority                      // es above-the-fold, la cargamos antes
+            loading="lazy"                // Hero usa min-h-screen, así que About
+                                           // (y este avatar) NUNCA están en el
+                                           // viewport inicial — priority acá solo
+                                           // competía por ancho de banda con los
+                                           // recursos que sí son críticos (fuente,
+                                           // texto del Hero) sin ganar nada de LCP.
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
         </div>
