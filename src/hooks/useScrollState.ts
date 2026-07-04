@@ -1,63 +1,19 @@
-import { useState, useEffect, useRef } from 'react'
+"use client";
 
-interface ScrollState {
-  scrollY: number
-  scrollProgress: number
-  isScrolled: boolean
-  showBackToTop: boolean
-  isSideNavVisible: boolean
-}
+import { useScrollContext, type ScrollContextValue } from '@/context/ScrollContext';
 
+export type ScrollState = ScrollContextValue;
+
+/**
+ * @deprecated Preferir useScrollContext() directamente en código nuevo.
+ *
+ * Este hook antes creaba su propio listener de "scroll" + su propio rAF
+ * en CADA componente que lo llamaba (Navbar, SideNav, BackToTop,
+ * ScrollProgress usaban 4 instancias independientes). Ahora es solo un
+ * wrapper sobre ScrollProvider: un único listener compartido para toda
+ * la app. Se mantiene con la misma firma para no tener que tocar los
+ * componentes que ya lo consumen.
+ */
 export function useScrollState(): ScrollState {
-  const [state, setState] = useState<ScrollState>({
-    scrollY: 0,
-    scrollProgress: 0,
-    isScrolled: false,
-    showBackToTop: false,
-    isSideNavVisible: false,
-  })
-
-  const rafRef = useRef<number | null>(null)
-  const latestScrollY = useRef(0)
-
-  useEffect(() => {
-    const handleScroll = () => {
-      latestScrollY.current = window.scrollY
-
-      // Si ya hay un frame pendiente, no agendamos otro
-      if (rafRef.current !== null) return
-
-      rafRef.current = requestAnimationFrame(() => {
-        const scrollY = latestScrollY.current
-        const docHeight =
-          document.documentElement.scrollHeight - window.innerHeight
-        const scrollProgress =
-          docHeight > 0 ? Math.min((scrollY / docHeight) * 100, 100) : 0
-
-        setState({
-          scrollY,
-          scrollProgress,
-          isScrolled: scrollY > 40,        // mismo umbral que tenías en Navbar
-          showBackToTop: scrollY > 500,    // mismo umbral que tenías en BackToTop
-          isSideNavVisible: scrollY > 200, // mismo umbral que tenías en SideNav
-        })
-
-        rafRef.current = null
-      })
-    }
-
-    // Ejecutamos una vez al montar para el estado inicial
-    handleScroll()
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-      if (rafRef.current !== null) {
-        cancelAnimationFrame(rafRef.current)
-      }
-    }
-  }, [])
-
-  return state
+  return useScrollContext();
 }
