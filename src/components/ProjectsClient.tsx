@@ -1,7 +1,6 @@
-// ProjectsClient.tsx
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, type CSSProperties } from 'react';
 import { m, useInView, AnimatePresence } from 'framer-motion';
 import { Layers, Code2, Layout, Globe, Clock } from 'lucide-react';
 import { ProjectCard, UpcomingCard, type ProjectCardData } from './projects/index';
@@ -40,7 +39,11 @@ export function ProjectsClient({
     activeCategory === 'all' || activeCategory === 'fullstack';
 
   return (
-    <section id="projects" className="relative py-28 overflow-hidden">
+    <section
+      id="projects"
+      className="relative py-28 overflow-hidden cv-auto"
+      style={{ '--cv-size': '1400px' } as CSSProperties}
+    >
       {/* Glow orbs */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 right-1/4 w-80 h-80 bg-violet-600/10 rounded-full blur-3xl" />
