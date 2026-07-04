@@ -1,10 +1,18 @@
 // Projects.tsx — Server Component: trae los proyectos de la base de datos
 // y le pasa los datos ya resueltos a ProjectsClient (que mantiene los filtros,
 // animaciones y todo lo interactivo).
+//
+// Igual que en Skills.tsx: ProjectsClient se carga como chunk separado
+// (next/dynamic) para no sumar su JS al bundle inicial de la página.
+import dynamic from 'next/dynamic';
 import { getAllProjects } from '@/actions/projects';
 import { PROJECT_FILTER_TABS } from '@/lib/constants';
-import { ProjectsClient } from './ProjectsClient';
-import type { ProjectCardData } from './projects/index';
+import type { ProjectCardData } from './projects/types';
+
+const ProjectsClient = dynamic(
+  () => import('./ProjectsClient').then((mod) => mod.ProjectsClient),
+  { ssr: true }
+);
 
 export default async function Projects() {
   const allProjects = await getAllProjects();
