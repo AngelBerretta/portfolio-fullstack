@@ -1,0 +1,165 @@
+/* ══════════════════════════════════════════════════════════════════
+   TERMINAL SKILLS — colocado junto a TerminalCard.tsx / SkillsClient.tsx.
+   Viaja en el mismo chunk lazy (next/dynamic) que esos componentes,
+   en vez de bloquear el paint inicial de toda la app (incluido /admin).
+══════════════════════════════════════════════════════════════════ */
+
+.term-card {
+  background: var(--term-card-bg);
+  border: 1px solid var(--term-card-border);
+  box-shadow: var(--term-card-shadow);
+  transition: box-shadow 0.3s, border-color 0.3s;
+}
+.term-card:hover {
+  box-shadow: var(--term-card-shadow-h);
+}
+[data-theme="light"] .term-card:hover {
+  border-color: rgba(99, 102, 241, 0.35);
+}
+
+.term-titlebar {
+  background: var(--term-titlebar-bg);
+  border-color: var(--term-titlebar-border);
+}
+.term-body { background: transparent; }
+
+[data-theme="light"] #skills {
+  background-image: radial-gradient(
+    circle,
+    rgba(99, 102, 241, 0.18) 1px,
+    transparent 1px
+  ) !important;
+  background-size: 22px 22px !important;
+  background-color: #f0f4ff !important;
+}
+
+.term-scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent           0px,
+    transparent           2px,
+    var(--term-scan-line) 2px,
+    var(--term-scan-line) 3px
+  );
+  opacity: 0.9;
+}
+[data-theme="light"] .term-scanlines { display: none; }
+
+@keyframes term-sweep {
+  0%   { top: -8%;  opacity: 0;   }
+  5%   {            opacity: 0.9; }
+  92%  {            opacity: 0.5; }
+  100% { top: 106%; opacity: 0;   }
+}
+.term-sweep {
+  position: absolute;
+  left: 0; right: 0;
+  height: 40px;
+  pointer-events: none;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    transparent              0%,
+    var(--term-sweep-color)  35%,
+    var(--term-sweep-color)  65%,
+    transparent              100%
+  );
+  animation: term-sweep 9s linear infinite;
+  animation-play-state: paused;
+}
+[data-theme="light"] .term-sweep { display: none; }
+.term-card--active .term-sweep { animation-play-state: running; }
+.term-card:nth-child(2) .term-sweep { animation-delay: -3s; }
+.term-card:nth-child(3) .term-sweep { animation-delay: -6s; }
+
+.global-scanlines {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent             0px,
+    transparent             3px,
+    var(--term-global-scan) 3px,
+    var(--term-global-scan) 4px
+  );
+}
+[data-theme="light"] .global-scanlines { display: none; }
+
+.skill-row {
+  cursor: default;
+  transition: background 0.2s, border-left-color 0.2s;
+}
+.skill-row:hover {
+  background: var(--term-row-hover-bg) !important;
+}
+
+.skill-icon-img {
+  filter: var(--term-icon-grayscale);
+  transition: filter 0.25s ease;
+}
+.skill-row:hover .skill-icon-img { filter: var(--term-icon-grayscale-h); }
+
+.skill-icon-inv { filter: var(--term-icon-inv); }
+.skill-row:hover .skill-icon-inv { filter: var(--term-icon-inv-h); }
+
+.skill-icon-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: var(--term-icon-node-op);
+  transition: opacity 0.25s;
+}
+.skill-row:hover .skill-icon-node { opacity: 1; }
+
+@keyframes term-glitch {
+  0%   { transform: translate(0);           filter: none; }
+  12%  { transform: translate(-2px,  1px);  filter: drop-shadow( 2px 0 #22d3ee)
+                                                     drop-shadow(-1px 0 #f87171); }
+  25%  { transform: translate( 2px, -1px);  filter: drop-shadow(-2px 0 #f87171); }
+  37%  { transform: translate(-1px,  2px);  filter: drop-shadow( 1px 0 #a78bfa)
+                                                     brightness(1.12); }
+  50%  { transform: translate( 1px, -2px);  filter: drop-shadow(-1px 0 #22d3ee); }
+  62%  { transform: translate(-2px,  0px);  filter: drop-shadow( 2px 0 #f87171)
+                                                     hue-rotate(25deg); }
+  75%  { transform: translate( 2px,  1px);  filter: drop-shadow(-2px 0 #a78bfa); }
+  87%  { transform: translate(-1px, -1px);  filter: drop-shadow( 1px 0 #22d3ee)
+                                                     brightness(1.08); }
+  100% { transform: translate(0);           filter: none; }
+}
+[data-theme="dark"] .skill-row:hover .skill-glitch-icon *,
+[data-theme="dark"] .skill-row:hover .skill-glitch-icon img,
+[data-theme="dark"] .skill-row:hover .skill-glitch-icon svg {
+  animation: term-glitch 0.55s linear infinite;
+}
+
+[data-theme="light"] .skill-glitch-icon {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+[data-theme="light"] .skill-row:hover .skill-glitch-icon {
+  transform: translateY(-1px) scale(1.08);
+  box-shadow: 0 3px 10px rgba(99, 102, 241, 0.20);
+}
+
+[data-theme="light"] #skills .absolute.bg-cyan-500\/\[0\.03\] { opacity: 0.6; }
+[data-theme="light"] #skills .absolute.bg-purple-500\/\[0\.04\] { opacity: 0.5; }
+
+@keyframes term-blink {
+  0%, 49%   { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.term-blink { display: inline-block; animation: term-blink 1s step-end infinite; user-select: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .term-scanlines,
+  .term-sweep,
+  .global-scanlines {
+    display: none;
+  }
+  .term-blink {
+    animation: none;
+    opacity: 1;
+  }
+}

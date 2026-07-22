@@ -1,3 +1,4 @@
+import './terminal.css';
 import { useRef, useState } from 'react';
 import { m, useInView, AnimatePresence } from 'framer-motion';
 import { Terminal, ChevronRight } from 'lucide-react';
