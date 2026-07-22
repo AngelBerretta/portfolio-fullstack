@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, type CSSProperties } from 'react';
+import { useRef, useState } from 'react';
 import { m, useInView, AnimatePresence } from 'framer-motion';
 import { Layers, Code2, Layout, Globe, Clock } from 'lucide-react';
 import { ProjectCard, UpcomingCard, type ProjectCardData } from './projects/index';
@@ -42,7 +42,6 @@ export function ProjectsClient({
     <section
       id="projects"
       className="relative py-28 overflow-hidden cv-auto"
-      style={{ '--cv-size': '1400px' } as CSSProperties}
     >
       {/* Glow orbs */}
       <div className="absolute inset-0 pointer-events-none">
