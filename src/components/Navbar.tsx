@@ -1,12 +1,21 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { m } from 'framer-motion';
 import { Code2, Home, User, Zap, FolderOpen, Mail } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
-import { NavbarMobileMenu } from './NavbarMobileMenu';
 import { useScrollState } from '@/hooks/useScrollState';    
 import { useActiveSection } from '@/hooks/useActiveSection';
+
+// El menú mobile (Framer Motion + su CSS colocado) solo hace falta cuando
+// el usuario efectivamente lo abre — nunca en el HTML inicial. ssr:false
+// es seguro acá porque duplica los mismos links del <nav> desktop, que sí
+// se renderiza en el servidor y es indexable.
+const NavbarMobileMenu = dynamic(
+  () => import('./NavbarMobileMenu').then((mod) => mod.NavbarMobileMenu),
+  { ssr: false }
+);
 
 const navLinks = [
   { label: 'Inicio',    href: '#hero',     icon: <Home      size={16} /> },
@@ -153,13 +162,15 @@ export default function Navbar() {
         </div>
       </m.header>
 
-      <NavbarMobileMenu
-        menuOpen={menuOpen}
-        active={active}
-        navLinks={navLinks}
-        onClose={() => setMenuOpen(false)}
-        onNavigate={handleNav}
-      />
+      {menuOpen && (
+        <NavbarMobileMenu
+          menuOpen={menuOpen}
+          active={active}
+          navLinks={navLinks}
+          onClose={() => setMenuOpen(false)}
+          onNavigate={handleNav}
+        />
+      )}
     </>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import './navbar-mobile.css';
 import { m, AnimatePresence } from 'framer-motion';   // ← m en vez de motion
 import { ChevronRight } from 'lucide-react';
 
