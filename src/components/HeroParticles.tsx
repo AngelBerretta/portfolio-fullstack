@@ -32,9 +32,21 @@ export function HeroParticles() {
     // para no generar un mismatch de hidratación (server renderiza null,
     // acá recién generamos las partículas). No se puede calcular esto
     // durante el render sin romper la hidratación.
+    // requestIdleCallback: generar 15-20 divs con custom properties justo
+    // en el mount compite por el hilo principal con la hidratación de
+    // Hero/Navbar (candidato directo al long task de Layout del reporte).
+    // Diferirlo a un idle slot saca ese trabajo del path crítico sin
+    // cambiar el efecto visual. Fallback a setTimeout para Safari, que
+    // no soporta requestIdleCallback.
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setParticles(generateParticles(isMobile ? 15 : 25));
+    const generate = () => setParticles(generateParticles(isMobile ? 15 : 20));
+
+    if ('requestIdleCallback' in window) {
+      const id = requestIdleCallback(generate, { timeout: 500 });
+      return () => cancelIdleCallback(id);
+    }
+    const id = setTimeout(generate, 0);
+    return () => clearTimeout(id);
   }, []);
 
   if (particles.length === 0) return null;
