@@ -1,6 +1,5 @@
 'use client';
 
-import type { CSSProperties } from 'react';
 import { m } from 'framer-motion';
 import { TerminalCard } from './TerminalCard';
 import type { TCategory } from './types';
@@ -10,7 +9,7 @@ export function SkillsClient({ categories }: { categories: TCategory[] }) {
     <section
       id="skills"
       className="py-24 relative overflow-hidden cv-auto"
-      style={{ background: 'var(--bg-base)', '--cv-size': '900px' } as CSSProperties}
+      style={{ background: 'var(--bg-base)' }}
     >
       <div className="absolute inset-0 pointer-events-none z-0 global-scanlines" aria-hidden />
       <div className="absolute inset-0 pointer-events-none z-0" aria-hidden>
