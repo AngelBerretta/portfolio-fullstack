@@ -65,6 +65,7 @@
   --term-icon-node-op:     0.5;
   --term-added-in-op:      80;
   --term-added-val-op:     bb;
+  --term-tree-guide:       rgba(100, 116, 139, 0.45);
 }
 
 /* ── Theme variables light ───────────────────────────────────────── */
@@ -131,6 +132,7 @@
   --term-icon-node-op:     0.7;
   --term-added-in-op:      55;
   --term-added-val-op:     99;
+  --term-tree-guide:       rgba(107, 114, 128, 0.45);
 }
 
 /* ── Base styles ─────────────────────────────────────────────────── */
@@ -202,42 +204,9 @@ body {
   50%       { opacity: 0; }
 }
 
-@keyframes fill-bar {
-  from { width: 0%; }
-  to   { width: var(--target-width); }
-}
-
 @keyframes rotate-gradient {
   0%   { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
-}
-
-@keyframes term-blink {
-  0%, 49%   { opacity: 1; }
-  50%, 100% { opacity: 0; }
-}
-
-@keyframes term-sweep {
-  0%   { top: -8%;  opacity: 0;   }
-  5%   {            opacity: 0.9; }
-  92%  {            opacity: 0.5; }
-  100% { top: 106%; opacity: 0;   }
-}
-
-@keyframes term-glitch {
-  0%   { transform: translate(0);           filter: none; }
-  12%  { transform: translate(-2px,  1px);  filter: drop-shadow( 2px 0 #22d3ee)
-                                                     drop-shadow(-1px 0 #f87171); }
-  25%  { transform: translate( 2px, -1px);  filter: drop-shadow(-2px 0 #f87171); }
-  37%  { transform: translate(-1px,  2px);  filter: drop-shadow( 1px 0 #a78bfa)
-                                                     brightness(1.12); }
-  50%  { transform: translate( 1px, -2px);  filter: drop-shadow(-1px 0 #22d3ee); }
-  62%  { transform: translate(-2px,  0px);  filter: drop-shadow( 2px 0 #f87171)
-                                                     hue-rotate(25deg); }
-  75%  { transform: translate( 2px,  1px);  filter: drop-shadow(-2px 0 #a78bfa); }
-  87%  { transform: translate(-1px, -1px);  filter: drop-shadow( 1px 0 #22d3ee)
-                                                     brightness(1.08); }
-  100% { transform: translate(0);           filter: none; }
 }
 
 @keyframes particle-float {
@@ -256,11 +225,19 @@ body {
   50%       { transform: translateY(8px); }
 }
 
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
 /* ── Clases de animación ─────────────────────────────────────────── */
 .float-anim       { animation: float 4s ease-in-out infinite; }
 .cursor-blink     { animation: blink 1s step-end infinite; }
-.skill-bar-fill   { animation: fill-bar 1.5s ease-out forwards; }
-.term-blink       { display: inline-block; animation: term-blink 1s step-end infinite; user-select: none; }
 .particle         { animation: particle-float var(--duration) var(--delay) ease-in-out infinite; border-radius: 50%; position: absolute; }
 .scroll-cue-arrow { animation: scroll-bounce 1.5s ease-in-out infinite; }
 
@@ -460,233 +437,6 @@ body {
   background: rgba(59, 130, 246, 0.12);
 }
 
-/* ── Mobile menu overlay ─────────────────────────────────────────── */
-.mobile-menu-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 35;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(2px);
-}
-[data-theme="light"] .mobile-menu-overlay {
-  background: rgba(0, 0, 0, 0.15);
-}
-
-/* ── Mobile menu panel ───────────────────────────────────────────── */
-.mobile-menu-panel {
-  position: fixed;
-  top: 64px;
-  left: 0;
-  right: 0;
-  z-index: 40;
-  background: var(--bg-mobile-menu);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border-accent);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-}
-[data-theme="light"] .mobile-menu-panel {
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-}
-
-/* ── Mobile nav item ─────────────────────────────────────────────── */
-.mobile-nav-item {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 13px 16px;
-  border-radius: 12px;
-  border: 1px solid transparent;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  width: 100%;
-  text-align: left;
-}
-.mobile-nav-item:hover {
-  color: var(--text-primary);
-  background: var(--bg-card);
-  border-color: var(--border-subtle);
-}
-.mobile-nav-item.active {
-  color: #60A5FA;
-  background: rgba(59, 130, 246, 0.10);
-  border-color: rgba(59, 130, 246, 0.30);
-}
-.mobile-nav-item .nav-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 9px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  flex-shrink: 0;
-  transition: all 0.2s ease;
-}
-.mobile-nav-item.active .nav-icon {
-  background: rgba(59, 130, 246, 0.15);
-  border-color: rgba(59, 130, 246, 0.35);
-}
-.mobile-nav-item .nav-chevron {
-  margin-left: auto;
-  opacity: 0;
-  transform: translateX(-4px);
-  transition: all 0.2s ease;
-}
-.mobile-nav-item:hover .nav-chevron,
-.mobile-nav-item.active .nav-chevron {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* ══════════════════════════════════════════════════════════════════
-   TERMINAL SKILLS
-══════════════════════════════════════════════════════════════════ */
-
-.term-glow-green {
-  text-shadow: 0 0 6px rgba(74, 222, 128, 0.80), 0 0 14px rgba(74, 222, 128, 0.35);
-}
-[data-theme="light"] .term-glow-green {
-  text-shadow: 0 0 8px rgba(22, 163, 74, 0.40);
-}
-
-.term-card {
-  background: var(--term-card-bg);
-  border: 1px solid var(--term-card-border);
-  box-shadow: var(--term-card-shadow);
-  transition: box-shadow 0.3s, border-color 0.3s;
-}
-.term-card:hover {
-  box-shadow: var(--term-card-shadow-h);
-}
-[data-theme="light"] .term-card:hover {
-  border-color: rgba(99, 102, 241, 0.35);
-}
-
-.term-titlebar {
-  background: var(--term-titlebar-bg);
-  border-color: var(--term-titlebar-border);
-}
-.term-body { background: transparent; }
-
-/* Dot-grid en light */
-[data-theme="light"] #skills {
-  background-image: radial-gradient(
-    circle,
-    rgba(99, 102, 241, 0.18) 1px,
-    transparent 1px
-  ) !important;
-  background-size: 22px 22px !important;
-  background-color: #f0f4ff !important;
-}
-
-/* Scanlines */
-.term-scanlines {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  border-radius: inherit;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent           0px,
-    transparent           2px,
-    var(--term-scan-line) 2px,
-    var(--term-scan-line) 3px
-  );
-  opacity: 0.9;
-}
-[data-theme="light"] .term-scanlines { display: none; }
-
-/* Sweep */
-.term-sweep {
-  position: absolute;
-  left: 0; right: 0;
-  height: 40px;
-  pointer-events: none;
-  z-index: 1;
-  background: linear-gradient(
-    180deg,
-    transparent              0%,
-    var(--term-sweep-color)  35%,
-    var(--term-sweep-color)  65%,
-    transparent              100%
-  );
-  animation: term-sweep 9s linear infinite;
-  /* Pausada por defecto: solo corre mientras la card está visible en
-     pantalla (ver .term-card--active, controlado por useInView en
-     TerminalCard.tsx). Evita que el compositor siga animando esta capa
-     9s en loop mientras el usuario está leyendo otra sección. */
-  animation-play-state: paused;
-}
-[data-theme="light"] .term-sweep { display: none; }
-.term-card--active .term-sweep { animation-play-state: running; }
-.term-card:nth-child(2) .term-sweep { animation-delay: -3s; }
-.term-card:nth-child(3) .term-sweep { animation-delay: -6s; }
-
-/* Global scanlines */
-.global-scanlines {
-  background: repeating-linear-gradient(
-    0deg,
-    transparent             0px,
-    transparent             3px,
-    var(--term-global-scan) 3px,
-    var(--term-global-scan) 4px
-  );
-}
-[data-theme="light"] .global-scanlines { display: none; }
-
-/* Skill row */
-.skill-row {
-  cursor: default;
-  transition: background 0.2s, border-left-color 0.2s;
-}
-.skill-row:hover {
-  background: var(--term-row-hover-bg) !important;
-}
-
-/* Iconos */
-.skill-icon-img {
-  filter: var(--term-icon-grayscale);
-  transition: filter 0.25s ease;
-}
-.skill-row:hover .skill-icon-img { filter: var(--term-icon-grayscale-h); }
-
-.skill-icon-inv { filter: var(--term-icon-inv); }
-.skill-row:hover .skill-icon-inv { filter: var(--term-icon-inv-h); }
-
-.skill-icon-node {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: var(--term-icon-node-op);
-  transition: opacity 0.25s;
-}
-.skill-row:hover .skill-icon-node { opacity: 1; }
-
-/* Glitch — solo dark */
-[data-theme="dark"] .skill-row:hover .skill-glitch-icon *,
-[data-theme="dark"] .skill-row:hover .skill-glitch-icon img,
-[data-theme="dark"] .skill-row:hover .skill-glitch-icon svg {
-  animation: term-glitch 0.55s linear infinite;
-}
-
-/* Micro-elevación en light */
-[data-theme="light"] .skill-glitch-icon {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-[data-theme="light"] .skill-row:hover .skill-glitch-icon {
-  transform: translateY(-1px) scale(1.08);
-  box-shadow: 0 3px 10px rgba(99, 102, 241, 0.20);
-}
-
-/* Ambient glows en light */
-[data-theme="light"] #skills .absolute.bg-cyan-500\/\[0\.03\] { opacity: 0.6; }
-[data-theme="light"] #skills .absolute.bg-purple-500\/\[0\.04\] { opacity: 0.5; }
-
 /* ── Reducir blurs en mobile ─────────────────────────────────────── */
 @media (max-width: 768px) {
   #hero .blur-3xl,
@@ -742,18 +492,6 @@ body {
     opacity: 0;
   }
 
-  /* Terminal */
-  .term-scanlines,
-  .term-sweep,
-  .global-scanlines {
-    display: none;
-  }
-
-  .term-blink {
-    animation: none;
-    opacity: 1;
-  }
-
   /* Tailwind animate-pulse */
   .animate-pulse {
     animation: none;
@@ -799,4 +537,22 @@ body {
 .cv-auto {
   content-visibility: auto;
   contain-intrinsic-size: auto var(--cv-size, 800px);
+}
+
+/* Alturas estimadas por breakpoint — el grid de Skills/Projects cambia
+   de columnas según viewport (lg:grid-cols-3 en Skills, sm:grid-cols-2
+   lg:grid-cols-3 en Projects), así que un único --cv-size fijo queda
+   muy por debajo de la altura real en mobile (contenido apilado en 1
+   columna) vs desktop, causando que content-visibility corrija el
+   placeholder al alto real cuando la sección entra en juego — ese
+   ajuste es el shift de layout detrás del CLS de 0.04 del reporte.
+   Valores medidos en DevTools (375px y 1280px de ancho, fecha: [hoy]).
+   #projects depende de cuántos proyectos haya en la DB — si se agregan
+   más desde el admin, hay que re-medir y actualizar estos valores. */
+#skills.cv-auto   { --cv-size: 1720px; } /* medido en 375px: 1711px */
+#projects.cv-auto { --cv-size: 5630px; } /* medido en 375px: 5626px */
+
+@media (min-width: 1024px) {
+  #skills.cv-auto   { --cv-size: 850px; }  /* medido en 1280px: 842px */
+  #projects.cv-auto { --cv-size: 2520px; } /* medido en 1280px: 2514px */
 }

@@ -1,6 +1,5 @@
 "use client";
 
-import { m } from 'framer-motion';
 import { Mail, ArrowDown } from 'lucide-react';
 import { HeroParticles } from './HeroParticles';
 import { useTypewriter } from '../hooks/useTypewriter';
@@ -20,7 +19,6 @@ export default function Hero() {
       id="hero"
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-grid"
     >
-      {/* Glow orbs — el tercero (600px, el más caro de rasterizar) se oculta en mobile */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-sky-500/20 rounded-full blur-3xl" />
@@ -31,8 +29,6 @@ export default function Hero() {
 
       <div className="relative z-10 max-w-6xl mx-auto px-6 py-28 flex flex-col items-center text-center">
 
-        {/* Name — sin framer-motion: es el elemento LCP, pinta instantáneo en vez de
-            esperar a que hidrate React + corra la animación de opacidad */}
         <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight mb-5 leading-none [color:var(--text-primary)]">
           Angel{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-400 to-cyan-300 glow-text">
@@ -40,26 +36,14 @@ export default function Hero() {
           </span>
         </h1>
 
-        {/* Typewriter */}
-        <m.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="h-12 md:h-14 flex items-center justify-center mb-7"
-        >
+        <div className="h-12 md:h-14 flex items-center justify-center mb-7 opacity-0 animate-[fade-in-up_0.6s_ease-out_0.3s_forwards]">
           <span className="text-xl md:text-3xl font-semibold text-sky-300 glow-text-cyan font-mono">
             {typedText}
             <span className="cursor-blink text-blue-400 ml-0.5">|</span>
           </span>
-        </m.div>
+        </div>
 
-        {/* Description */}
-        <m.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="max-w-2xl text-base md:text-lg leading-relaxed mb-8 [color:var(--text-secondary)]"
-        >
+        <p className="max-w-2xl text-base md:text-lg leading-relaxed mb-8 [color:var(--text-secondary)] opacity-0 animate-[fade-in-up_0.6s_ease-out_0.4s_forwards]">
           Desarrollador Web Full Stack en continua formación{' '}
           <br className="hidden sm:block" />
           de Buenos Aires, Argentina{' '}
@@ -68,31 +52,19 @@ export default function Hero() {
           <span className="font-medium [color:var(--text-secondary)]">
             ¡Estoy listo para aportar creatividad y compromiso a nuevos desafíos!
           </span>
-        </m.p>
+        </p>
 
-        {/* Status badge */}
-        <m.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.45 }}
-          className="mb-8 inline-flex items-center gap-2 px-5 py-2 rounded-full 
+        <div className="mb-8 inline-flex items-center gap-2 px-5 py-2 rounded-full 
                     bg-green-500/10 dark:bg-green-500/10 
                     border border-green-600/40 dark:border-green-500/30 
                     text-green-700 dark:text-green-300 
-                    text-sm font-medium"
-        >
+                    text-sm font-medium
+                    opacity-0 animate-[fade-in-up_0.6s_ease-out_0.45s_forwards]">
           <span className="w-2 h-2 rounded-full bg-green-500 dark:bg-green-400 animate-pulse" />
           Disponible para trabajar
-          {/* <Sparkles size={14} className="text-yellow-500 dark:text-yellow-400" /> */}
-        </m.div>
+        </div>
 
-        {/* CTA Buttons */}
-        <m.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="flex flex-wrap gap-4 justify-center mb-12"
-        >
+        <div className="flex flex-wrap gap-4 justify-center mb-12 opacity-0 animate-[fade-in-up_0.6s_ease-out_0.5s_forwards]">
           <button
             onClick={() =>
               document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })
@@ -109,15 +81,9 @@ export default function Hero() {
           >
             Contactame
           </button>
-        </m.div>
+        </div>
 
-        {/* Socials */}
-        <m.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="flex items-center gap-4 mb-16"
-        >
+        <div className="flex items-center gap-4 mb-16 opacity-0 animate-[fade-in-up_0.6s_ease-out_0.6s_forwards]">
           {[
             {
               icon: <GitHubIcon />,
@@ -150,15 +116,9 @@ export default function Hero() {
               {s.icon}
             </a>
           ))}
-        </m.div>
+        </div>
 
-        {/* Stats */}
-        <m.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.7 }}
-          className="flex gap-10 md:gap-20 justify-center"
-        >
+        <div className="flex gap-10 md:gap-20 justify-center opacity-0 animate-[fade-in-up_0.6s_ease-out_0.7s_forwards]">
           {[
             { number: '8+', label: 'Proyectos' },
             { number: '1+', label: 'Año freelance' },
@@ -173,26 +133,21 @@ export default function Hero() {
               </div>
             </div>
           ))}
-        </m.div>
+        </div>
       </div>
 
-      {/* Scroll cue */}
-      <m.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer hover:text-blue-400 transition-colors"
+      <div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer hover:text-blue-400 transition-colors opacity-0 animate-[fade-in_0.4s_ease-out_1.5s_forwards]"
         style={{ color: 'var(--text-faint)' }}
         onClick={() =>
           document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })
         }
       >
         <span className="text-[10px] font-semibold tracking-[0.3em] uppercase">Scroll</span>
-        {/* El bounce ahora es CSS puro — la clase scroll-cue-arrow está en globals.css */}
         <div className="scroll-cue-arrow">
           <ArrowDown size={16} />
         </div>
-      </m.div>
+      </div>
     </section>
   );
 }
