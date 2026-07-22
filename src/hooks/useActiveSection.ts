@@ -34,11 +34,19 @@ export function useActiveSection(): SectionId {
           }
         },
         {
-          // Se activa cuando al menos el 20% de la sección es visible
-          threshold: 0.2,
-          // Recorte del viewport: ignoramos el 10% superior e inferior
-          // para que el cambio no sea brusco
-          rootMargin: '-10% 0px -10% 0px',
+          // threshold:0.2 relativo al alto propio de cada sección rompe con
+          // secciones muy largas (ej. #projects, con grid + upcoming +
+          // footer): el 20% de su altura puede superar el área visible del
+          // viewport, y el ratio nunca llega a cumplirse — la sección nunca
+          // se marca "intersecting" sin importar cuánto scroll hagas.
+          //
+          // Fix: colapsar el viewport a una línea central (-50% arriba y
+          // -50% abajo) y threshold:0 — la sección se activa en el momento
+          // exacto en que esa línea la cruza, sin depender de su alto.
+          // Es la técnica estándar de scrollspy y funciona igual de bien
+          // para secciones de 400px que de 4000px.
+          threshold: 0,
+          rootMargin: '-50% 0px -50% 0px',
         }
       )
 
