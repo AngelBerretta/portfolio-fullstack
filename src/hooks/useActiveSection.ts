@@ -1,61 +1,62 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 
-// Mismo orden que en tu Navbar y SideNav
 const SECTIONS = ['hero', 'about', 'skills', 'projects', 'contact'] as const
 export type SectionId = (typeof SECTIONS)[number]
 
+// Offset de referencia: usamos "un poco debajo del navbar fijo" como línea
+// de corte, en vez del centro exacto de la pantalla. Así la sección se
+// marca activa apenas empieza a aparecer bajo el navbar.
+const OFFSET = 100
+
 export function useActiveSection(): SectionId {
   const [activeSection, setActiveSection] = useState<SectionId>('hero')
-  const visibleSections = useRef<Set<SectionId>>(new Set(['hero']))
 
   useEffect(() => {
-    const observers: IntersectionObserver[] = []
+    let rafId: number | null = null
 
-    SECTIONS.forEach((sectionId) => {
-      const element = document.getElementById(sectionId)
-      if (!element) return
+    const checkActiveSection = () => {
+      rafId = null
 
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              visibleSections.current.add(sectionId)
-            } else {
-              visibleSections.current.delete(sectionId)
-            }
-          })
+      // Si llegamos al final de la página, forzamos "contact" — evita que
+      // quede pegado en la sección anterior si ***REMOVED***contact es más corto que
+      // el resto y su "top" nunca llega a cruzar el OFFSET.
+      const scrolledToBottom =
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2
 
-          // De las secciones visibles, tomamos la primera en el orden del DOM
-          const firstVisible = SECTIONS.find((id) =>
-            visibleSections.current.has(id)
-          )
-          if (firstVisible) {
-            setActiveSection(firstVisible)
-          }
-        },
-        {
-          // threshold:0.2 relativo al alto propio de cada sección rompe con
-          // secciones muy largas (ej. ***REMOVED***projects, con grid + upcoming +
-          // footer): el 20% de su altura puede superar el área visible del
-          // viewport, y el ratio nunca llega a cumplirse — la sección nunca
-          // se marca "intersecting" sin importar cuánto scroll hagas.
-          //
-          // Fix: colapsar el viewport a una línea central (-50% arriba y
-          // -50% abajo) y threshold:0 — la sección se activa en el momento
-          // exacto en que esa línea la cruza, sin depender de su alto.
-          // Es la técnica estándar de scrollspy y funciona igual de bien
-          // para secciones de 400px que de 4000px.
-          threshold: 0,
-          rootMargin: '-50% 0px -50% 0px',
+      if (scrolledToBottom) {
+        setActiveSection('contact')
+        return
+      }
+
+      // Recorremos de abajo hacia arriba: la primera sección cuyo borde
+      // superior ya cruzó el offset es la sección activa actual.
+      for (let i = SECTIONS.length - 1; i >= 0; i--) {
+        const el = document.getElementById(SECTIONS[i])
+        if (!el) continue
+        const top = el.getBoundingClientRect().top
+        if (top <= OFFSET) {
+          setActiveSection(SECTIONS[i])
+          return
         }
-      )
+      }
 
-      observer.observe(element)
-      observers.push(observer)
-    })
+      setActiveSection('hero')
+    }
+
+    const onScroll = () => {
+      if (rafId === null) {
+        rafId = requestAnimationFrame(checkActiveSection)
+      }
+    }
+
+    checkActiveSection() // estado correcto si se recarga con scroll ya hecho
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
 
     return () => {
-      observers.forEach((observer) => observer.disconnect())
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      if (rafId !== null) cancelAnimationFrame(rafId)
     }
   }, [])
 

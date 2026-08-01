@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { m, useInView, AnimatePresence } from 'framer-motion';
 import { Layers, Code2, Layout, Globe, Clock } from 'lucide-react';
 import { ProjectCard, UpcomingCard, type ProjectCardData } from './projects/index';
+import Link from 'next/link';
 
 type CategoryTab = { id: string; label: string };
 
@@ -21,10 +22,14 @@ export function ProjectsClient({
   projects,
   upcomingProjects,
   categories,
+  totalCount,     // ← nuevo, opcional
+  viewAllHref,    // ← nuevo, opcional
 }: {
   projects: ProjectCardData[];
   upcomingProjects: ProjectCardData[];
   categories: readonly CategoryTab[];
+  totalCount?: number;
+  viewAllHref?: string;
 }) {
   const [activeCategory, setActiveCategory] = useState('all');
   const ref = useRef(null);
@@ -207,6 +212,24 @@ export function ProjectsClient({
           <div className="h-px w-16 [background:var(--border-subtle)]" />
         </m.div>
 
+        {viewAllHref && totalCount !== undefined && (
+          <m.div
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ delay: 0.9 }}
+            className="flex justify-center mt-8"
+          >
+            <Link
+              href={viewAllHref}
+              className="px-6 py-3 rounded-xl text-sm font-semibold text-white
+                bg-gradient-to-r from-blue-500 to-violet-500
+                hover:shadow-lg hover:shadow-blue-500/25 hover:scale-105
+                transition-all duration-300"
+            >
+              Ver todos los proyectos ({totalCount}) →
+            </Link>
+          </m.div>
+        )}
       </div>
     </section>
   );
