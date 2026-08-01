@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { m } from 'framer-motion';
 import { Code2, Home, User, Zap, FolderOpen, Mail } from 'lucide-react';
@@ -27,8 +28,15 @@ const navLinks = [
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { isScrolled } = useScrollState()
-  const active = useActiveSection()
+  const { isScrolled } = useScrollState();
+  const pathname = usePathname();
+  const router = useRouter();
+  const isHome = pathname === '/';
+
+  // En rutas que no son Home, useActiveSection() nunca va a encontrar
+  // los IDs (***REMOVED***about, ***REMOVED***skills, etc.) y va a quedar fijo en 'hero' por
+  // defecto — por eso solo lo usamos para marcar "activo" cuando isHome.
+  const active = useActiveSection();
 
   // Lock body scroll when menu is open
   useEffect(() => {
@@ -39,8 +47,17 @@ export default function Navbar() {
   const handleNav = (href: string) => {
     setMenuOpen(false);
     const id = href.replace('***REMOVED***', '');
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+
+    if (isHome) {
+      // Ya estamos en home → scroll normal
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      // Estamos en otra ruta (ej: /proyectos) → navegar a home + hash.
+      // Next.js hace scroll automático al elemento con ese id una vez
+      // que la navegación termina.
+      router.push(`/${href}`);
+    }
   };
 
   return (
@@ -75,7 +92,12 @@ export default function Navbar() {
           <nav className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => {
               const id = link.href.replace('***REMOVED***', '');
-              const isActive = active === id;
+              // Extra: marcamos "Proyectos" activo también si estamos
+              // parados en /proyectos (aunque no haya scroll ahí)
+              const isActive =
+                (isHome && active === id) ||
+                (!isHome && id === 'projects' && pathname.startsWith('/proyectos'));
+
               return (
                 <button
                   key={link.href}
@@ -165,7 +187,7 @@ export default function Navbar() {
       {menuOpen && (
         <NavbarMobileMenu
           menuOpen={menuOpen}
-          active={active}
+          active={isHome ? active : 'projects'}
           navLinks={navLinks}
           onClose={() => setMenuOpen(false)}
           onNavigate={handleNav}

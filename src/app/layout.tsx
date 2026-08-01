@@ -2,6 +2,13 @@ import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { MotionProvider } from "@/components/MotionProvider";
+import { ThemeProvider } from "@/context/ThemeContext";
+import { ScrollProvider } from "@/context/ScrollContext";
+import Navbar from "@/components/Navbar";
+import SideNav from "@/components/SideNav";
+import Footer from "@/components/Footer";
+import ScrollProgress from "@/components/ScrollProgress";
+import BackToTop from "@/components/BackToTop";
 import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({
@@ -63,11 +70,7 @@ const themeScript = `
 })();
 `;
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" data-scroll-behavior="smooth" data-theme="dark" suppressHydrationWarning>
       <head>
@@ -75,7 +78,16 @@ export default function RootLayout({
       </head>
       <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans`}>
         <MotionProvider>
-          {children}
+          <ThemeProvider>
+            <ScrollProvider>
+              <ScrollProgress />
+              <Navbar />
+              <SideNav />
+              <main>{children}</main>
+              <Footer />
+              <BackToTop />
+            </ScrollProvider>
+          </ThemeProvider>
         </MotionProvider>
         <Analytics />
       </body>

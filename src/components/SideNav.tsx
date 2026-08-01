@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from 'next/navigation';
 import { m } from 'framer-motion';
 import { useScrollState } from '@/hooks/useScrollState';
 import { useActiveSection } from '@/hooks/useActiveSection';
@@ -13,12 +14,21 @@ const sections = [
 ];
 
 export default function SideNav() {
-  const { isSideNavVisible } = useScrollState()
-  const active = useActiveSection()
+  const pathname = usePathname();
+  const { isSideNavVisible } = useScrollState();
+  const active = useActiveSection();
+
+  // El SideNav es un scrollspy pensado para las secciones de la home
+  // (***REMOVED***hero, ***REMOVED***about, ***REMOVED***skills...). Fuera de "/" esos IDs no existen,
+  // así que no tiene sentido renderizarlo — evitamos además que
+  // useActiveSection() quede "trabado" observando elementos inexistentes.
+  const isHome = pathname === '/';
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  if (!isHome) return null;
 
   return (
     <m.div
