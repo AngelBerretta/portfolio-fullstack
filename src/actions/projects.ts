@@ -5,7 +5,6 @@ import { prisma } from '@/lib/db';
 import { requireAuth } from '@/lib/require-auth';
 import { ProjectSchema, ReorderSchema } from '@/lib/validations';
 import { ok, err, type ActionResult } from '@/lib/action-types';
-import { unstable_cache } from 'next/cache';
 
 // ─── Helpers internos ────────────────────────────────────────────────────────
 
@@ -45,8 +44,13 @@ async function upsertTags(names: string[]) {
   );
 }
 
+/**
+ * Invalida todas las páginas que muestran proyectos.
+ * Se llama después de cada mutación (create, update, delete, reorder).
+ */
 function revalidateAll() {
   revalidatePath('/');
+  revalidatePath('/proyectos');
   revalidatePath('/admin/projects');
 }
 
@@ -209,26 +213,18 @@ export async function reorderProjects(
 
 // ─── READ HELPERS (para Server Components) ───────────────────────────────────
 
-// La query base — no se exporta directamente
-async function _getAllProjects() {
+/**
+ * Trae todos los proyectos ordenados. Usado en Home y en /proyectos.
+ * No usa un caché propio: la deduplicación/caché de la respuesta la maneja
+ * el Full Route Cache de Next.js vía `export const revalidate` en cada
+ * página, que se invalida con revalidatePath() en cada mutación de arriba.
+ */
+export async function getAllProjects() {
   return prisma.project.findMany({
     include: { tags: true },
     orderBy: { order: 'asc' },
   });
 }
-
-/**
- * Versión cacheada de getAllProjects.
- * - Se sirve desde caché estático hasta que revalidatePath('/') sea llamado
- *   (lo cual ya ocurre en cada mutación del admin).
- * - El tag 'projects' permite invalidar solo proyectos si algún día
- *   querés ser más granular.
- */
-export const getAllProjects = unstable_cache(
-  _getAllProjects,
-  ['all-projects'],          // cache key
-  { tags: ['projects'] }    // tag para invalidación granular futura
-);
 
 // getProjectById no lo cacheamos — solo se usa en el admin
 // donde siempre queremos datos frescos
