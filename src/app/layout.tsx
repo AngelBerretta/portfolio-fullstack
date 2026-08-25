@@ -4,11 +4,6 @@ import "./globals.css";
 import { MotionProvider } from "@/components/MotionProvider";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { ScrollProvider } from "@/context/ScrollContext";
-import Navbar from "@/components/Navbar";
-import SideNav from "@/components/SideNav";
-import Footer from "@/components/Footer";
-import ScrollProgress from "@/components/ScrollProgress";
-import BackToTop from "@/components/BackToTop";
 import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({
@@ -79,14 +74,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans`}>
         <MotionProvider>
           <ThemeProvider>
-            <ScrollProvider>
-              <ScrollProgress />
-              <Navbar />
-              <SideNav />
-              <main>{children}</main>
-              <Footer />
-              <BackToTop />
-            </ScrollProvider>
+            <ScrollProvider>{children}</ScrollProvider>
           </ThemeProvider>
         </MotionProvider>
         <Analytics />
