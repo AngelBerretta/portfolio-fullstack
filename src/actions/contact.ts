@@ -9,7 +9,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 // A dónde llegan los mensajes del formulario público. Se puede pisar con
 // CONTACT_TO_EMAIL en .env.local sin tocar código.
-const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL ?? 'angelcursodeingles2@gmail.com';
+const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL ?? 'angelberretta.dev@gmail.com';
 
 /**
  * Server Action del formulario de contacto público.
