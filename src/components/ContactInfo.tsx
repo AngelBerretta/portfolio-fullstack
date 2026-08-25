@@ -8,8 +8,8 @@ const contactInfo = [
   {
     icon: <Mail size={20} className="text-blue-400" />,
     label: 'Email',
-    value: 'angelcursodeingles2@gmail.com',
-    href: 'mailto:angelcursodeingles2@gmail.com',
+    value: 'angelberretta.dev@gmail.com',
+    href: 'mailto:angelberretta.dev@gmail.com',
   },
   {
     icon: <Phone size={20} className="text-sky-400" />,

@@ -99,7 +99,7 @@ export default function Hero() {
             },
             {
               icon: <Mail size={20} />,
-              href: 'mailto:angelcursodeingles2@gmail.com',
+              href: 'mailto:angelberretta.dev@gmail.com',
               label: 'Email',
               color: 'hover:text-blue-400 hover:border-blue-400/40 hover:bg-blue-400/8',
             },
