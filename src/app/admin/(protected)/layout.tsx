@@ -2,6 +2,8 @@ import { redirect } from 'next/navigation';
 import { auth } from '@/auth';
 import { Sidebar } from '@/components/admin/Sidebar';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminLayout({
   children,
 }: {
@@ -9,8 +11,6 @@ export default async function AdminLayout({
 }) {
   const session = await auth();
 
-  // El proxy.ts ya protege estas rutas, pero esta es una segunda capa
-  // server-side por si el layout se renderiza fuera de ese flujo.
   if (!session?.user) {
     redirect('/admin/login');
   }

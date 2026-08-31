@@ -3,6 +3,8 @@ import { FolderKanban, Sparkles, Star, Construction } from 'lucide-react';
 import { prisma } from '@/lib/db';
 import { auth } from '@/auth';
 
+export const dynamic = 'force-dynamic';
+
 async function getStats() {
   const [totalProjects, featuredProjects, inProgressProjects, totalSkills, totalTags] =
     await Promise.all([
