@@ -1,10 +1,16 @@
 "use client";
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { m } from 'framer-motion';          // ← m en vez de motion
 import { Code2, Heart } from 'lucide-react';
 
 export default function Footer() {
-  const year = new Date().getFullYear();
+  const [year, setYear] = useState<number | null>(null);
+
+  useEffect(() => {
+    // Se ejecuta solo en el navegador del usuario
+    setYear(new Date().getFullYear());
+  }, []);
 
   return (
     <footer className="relative py-10 border-t" style={{ borderColor: 'var(--border-subtle)' }}>
@@ -40,7 +46,8 @@ export default function Footer() {
               ·
             </Link>
             {' '}
-            <span style={{ color: 'var(--text-muted)' }}>{year}</span>
+            {/* Si el año aún no cargó en el cliente, mostramos un espacio o texto de carga discreto */}
+            <span style={{ color: 'var(--text-muted)' }}>{year || ''}</span>
           </p>
 
           {/* Stack */}
