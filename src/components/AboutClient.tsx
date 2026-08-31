@@ -1,10 +1,9 @@
 'use client';
 
-import { m, useInView } from 'framer-motion';
 import type { CSSProperties } from 'react';
-import { useRef } from 'react';
 import { MapPin, GraduationCap, Briefcase, Code2 } from 'lucide-react';
 import { AboutAvatar } from './AboutAvatar';
+import { useReveal } from '@/hooks/useReveal';
 
 export function AboutClient({
   bio,
@@ -23,10 +22,8 @@ export function AboutClient({
   currentFocus: string;
   cvUrl: string | null;
 }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const { ref, isInView, style } = useReveal<HTMLDivElement>('-100px');
 
-  // La bio se guarda en la DB como párrafos separados por línea en blanco.
   const bioParagraphs = bio.split(/\n\s*\n/).filter(Boolean);
 
   const infoCards = [
@@ -38,20 +35,15 @@ export function AboutClient({
 
   return (
     <section id="about" className="relative py-28 overflow-hidden">
-      {/* Background */}
+      {}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-0 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl" />
         <div className="absolute bottom-0 right-0 w-80 h-80 bg-violet-600/10 rounded-full blur-3xl" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6" ref={ref}>
-        {/* Section header */}
-        <m.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
+        {}
+        <div style={style('up')} className="text-center mb-16">
           <span className="text-blue-400 font-mono text-sm font-semibold tracking-widest uppercase mb-3 block">
             01. Sobre mí
           </span>
@@ -59,35 +51,32 @@ export function AboutClient({
             ¿Quién soy?
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-violet-400 rounded-full mx-auto mt-4" />
-        </m.div>
+        </div>
 
         <div className="grid lg:grid-cols-2 gap-14 items-start">
-          {/* Left — avatar + decorative */}
           <AboutAvatar isInView={isInView} avatarUrl={avatarUrl} />
 
-          {/* Right — text + cards */}
-          <m.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="space-y-6"
-          >
+          <div style={style('right', { duration: 0.7, delay: 0.2 })} className="space-y-6">
             <div className="space-y-4 leading-relaxed text-base md:text-lg" style={{ color: 'var(--text-secondary)' } as CSSProperties}>
               {bioParagraphs.map((paragraph, i) => (
                 <p key={i}>{paragraph}</p>
               ))}
             </div>
 
-            {/* Info grid */}
             <div className="grid sm:grid-cols-2 gap-3 pt-2">
               {infoCards.map((card, i) => (
-                <m.div
+                <div
                   key={card.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.5, delay: 0.3 + i * 0.08 }}
-                  className="p-4 rounded-xl border hover:border-blue-500/30 hover:bg-blue-500/5 transition-all duration-300 group"
-                  style={{ background: 'var(--bg-card)', borderColor: 'var(--border-subtle)' } as CSSProperties}
+                  style={{
+                    ...style('up', {
+                      duration: 0.5,
+                      delay: 0.3 + i * 0.08,
+                      extraProperties: ['border-color', 'background-color'],
+                    }),
+                    background: 'var(--bg-card)',
+                    borderColor: 'var(--border-subtle)',
+                  } as CSSProperties}
+                  className="p-4 rounded-xl border hover:border-blue-500/30 hover:bg-blue-500/5 group"
                 >
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5 shrink-0">{card.icon}</div>
@@ -96,18 +85,12 @@ export function AboutClient({
                       <p className="text-sm font-medium leading-snug" style={{ color: 'var(--text-secondary)' }}>{card.value}</p>
                     </div>
                   </div>
-                </m.div>
+                </div>
               ))}
             </div>
 
-            {/* CV download */}
-            {cvUrl && (
-              <m.div
-                initial={{ opacity: 0 }}
-                animate={isInView ? { opacity: 1 } : {}}
-                transition={{ delay: 0.7 }}
-                className="pt-2"
-              >
+            {cvUrl && (  
+              <div style={style('up', { duration: 0.4, delay: 0.7 })} className="pt-2">
                 <a
                   href={cvUrl}
                   target="_blank"
@@ -119,9 +102,9 @@ export function AboutClient({
                   </svg>
                   Descargar CV completo
                 </a>
-              </m.div>
+              </div>
             )}
-          </m.div>
+          </div>
         </div>
       </div>
     </section>

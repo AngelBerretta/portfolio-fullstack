@@ -1,6 +1,4 @@
-// AboutAvatar.tsx — columna izquierda de About: avatar, rings y trait pills
-import { m } from 'framer-motion';
-import Image from 'next/image';           // ← agregamos este import
+import Image from 'next/image';
 import type { CSSProperties } from 'react';
 import { Coffee, Zap, Code2 } from 'lucide-react';
 
@@ -17,38 +15,37 @@ export function AboutAvatar({
   isInView: boolean;
   avatarUrl: string;
 }) {
+  const revealStyle: CSSProperties = {
+    opacity: isInView ? 1 : 0,
+    transform: isInView ? 'translate(0, 0)' : 'translateX(-40px)',
+    transitionProperty: 'opacity, transform',
+    transitionDuration: '0.7s',
+    transitionDelay: '0.1s',
+    transitionTimingFunction: 'ease',
+  };
+
   return (
-    <m.div
-      initial={{ opacity: 0, x: -40 }}
-      animate={isInView ? { opacity: 1, x: 0 } : {}}
-      transition={{ duration: 0.7, delay: 0.1 }}
-      className="relative flex flex-col items-center gap-6 w-full"
-    >
-      {/* ── Wrapper del avatar (contiene rings + badge) ── */}
+    <div style={revealStyle} className="relative flex flex-col items-center gap-6 w-full">
+      {}
       <div className="relative">
-        {/* Decorative rings */}
+        {}
         <div className="absolute inset-0 -m-4 rounded-3xl border border-blue-500/20 rotate-3" />
         <div className="absolute inset-0 -m-8 rounded-3xl border border-violet-500/10 -rotate-2" />
 
-        {/* Avatar */}
+        {}
         <div className="relative w-72 h-72 md:w-80 md:h-80 rounded-3xl overflow-hidden border-2 border-blue-500/30 shadow-2xl shadow-blue-500/20 float-anim">
           <Image
             src={avatarUrl}
             alt="Foto de perfil de Angel Berretta"
-            fill                          // ocupa el 100% del contenedor relativo
+            fill
             sizes="(max-width: 768px) 288px, 320px"
             className="object-cover"
-            loading="lazy"                // Hero usa min-h-screen, así que About
-                                           // (y este avatar) NUNCA están en el
-                                           // viewport inicial — priority acá solo
-                                           // competía por ancho de banda con los
-                                           // recursos que sí son críticos (fuente,
-                                           // texto del Hero) sin ganar nada de LCP.
+            loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
         </div>
 
-        {/* Status badge */}
+        {}
         <div
           className="absolute -bottom-4 -right-4 rounded-2xl px-4 py-3 shadow-xl flex items-center gap-2"
           style={{
@@ -57,16 +54,13 @@ export function AboutAvatar({
           } as CSSProperties}
         >
           <span className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse" />
-          <span
-            className="text-sm font-semibold"
-            style={{ color: 'var(--text-primary)' }}
-          >
+          <span className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
             Open to work
           </span>
         </div>
       </div>
 
-      {/* ── Trait pills ── */}
+      {}
       <div className="mt-4 flex flex-wrap justify-center gap-2 w-full px-2">
         {traits.map((t) => (
           <div
@@ -83,6 +77,6 @@ export function AboutAvatar({
           </div>
         ))}
       </div>
-    </m.div>
+    </div>
   );
 }
