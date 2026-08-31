@@ -273,6 +273,10 @@ body {
   box-shadow: 0 0 30px rgba(59, 130, 246, 0.25), 0 0 60px rgba(59, 130, 246, 0.1);
 }
 
+.hover-glow:hover {
+  box-shadow: 0 16px 40px var(--glow-color, transparent);
+}
+
 .bg-grid {
   background-image:
     linear-gradient(var(--grid-line) 1px, transparent 1px),

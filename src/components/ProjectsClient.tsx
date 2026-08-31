@@ -1,9 +1,10 @@
 'use client';
 
-import { useRef, useState } from 'react';
-import { m, useInView, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
+import { m, AnimatePresence } from 'framer-motion';
 import { Layers, Code2, Layout, Globe, Clock } from 'lucide-react';
 import { ProjectCard, UpcomingCard, type ProjectCardData } from './projects/index';
+import { useReveal } from '@/hooks/useReveal';
 import Link from 'next/link';
 
 type CategoryTab = { id: string; label: string };
@@ -22,8 +23,8 @@ export function ProjectsClient({
   projects,
   upcomingProjects,
   categories,
-  totalCount,     // ← nuevo, opcional
-  viewAllHref,    // ← nuevo, opcional
+  totalCount,
+  viewAllHref,
 }: {
   projects: ProjectCardData[];
   upcomingProjects: ProjectCardData[];
@@ -32,8 +33,7 @@ export function ProjectsClient({
   viewAllHref?: string;
 }) {
   const [activeCategory, setActiveCategory] = useState('all');
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const { ref, style } = useReveal<HTMLDivElement>('-100px');
 
   const filtered =
     activeCategory === 'all'
@@ -48,7 +48,7 @@ export function ProjectsClient({
       id="projects"
       className="relative py-28 overflow-hidden cv-auto"
     >
-      {/* Glow orbs */}
+      {}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 right-1/4 w-80 h-80 bg-violet-600/10 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-1/4 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl" />
@@ -56,13 +56,8 @@ export function ProjectsClient({
 
       <div className="relative z-10 max-w-7xl mx-auto px-6" ref={ref}>
 
-        {/* ── Header ── */}
-        <m.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-14"
-        >
+        {}
+        <div style={style('up')} className="text-center mb-14">
           <span className="text-blue-400 font-mono text-sm font-semibold tracking-widest uppercase mb-3 block">
             03. Proyectos
           </span>
@@ -73,15 +68,10 @@ export function ProjectsClient({
             Una selección de proyectos freelance, personales y full stack en desarrollo.
           </p>
           <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-violet-400 rounded-full mx-auto mt-5" />
-        </m.div>
+        </div>
 
-        {/* ── Filter tabs ── */}
-        <m.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.15 }}
-          className="flex flex-wrap justify-center gap-2 mb-12"
-        >
+        {}
+        <div style={style('up', { duration: 0.5, delay: 0.15 })} className="flex flex-wrap justify-center gap-2 mb-12">
           {categories.map((cat) => {
             const isActive = activeCategory === cat.id;
             return (
@@ -97,7 +87,7 @@ export function ProjectsClient({
                   }
                 `}
               >
-                {/* Pill animado para el tab activo */}
+                {}
                 {isActive && (
                   <m.span
                     layoutId="filter-pill"
@@ -107,7 +97,7 @@ export function ProjectsClient({
                 )}
                 {getCategoryIcon(cat.id)}
                 {cat.label}
-                {/* Contador de proyectos por categoría */}
+                {}
                 <span className={`
                   text-[10px] font-bold px-1.5 py-0.5 rounded-md min-w-[20px] text-center
                   ${isActive
@@ -122,9 +112,9 @@ export function ProjectsClient({
               </button>
             );
           })}
-        </m.div>
+        </div>
 
-        {/* ── Grid proyectos live ── */}
+        {}
         <AnimatePresence mode="wait">
           <m.div
             key={activeCategory}
@@ -139,7 +129,7 @@ export function ProjectsClient({
                 <ProjectCard key={project.id} project={project} index={i} />
               ))
             ) : (
-              /* Empty state */
+
               <m.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -156,7 +146,7 @@ export function ProjectsClient({
           </m.div>
         </AnimatePresence>
 
-        {/* ── Proyectos en construcción ── */}
+        {}
         <AnimatePresence>
           {showUpcoming && upcomingProjects.length > 0 && (
             <m.div
@@ -166,7 +156,7 @@ export function ProjectsClient({
               transition={{ duration: 0.4, delay: 0.2 }}
               className="mt-14"
             >
-              {/* Separador */}
+              {}
               <div className="flex items-center gap-4 mb-8">
                 <div className="flex-1 h-px [background:var(--border-subtle)]" />
                 <div className="flex items-center gap-2 px-4 py-1.5 rounded-full border [border-color:var(--border-subtle)] [background:var(--bg-card)]">
@@ -190,13 +180,8 @@ export function ProjectsClient({
           )}
         </AnimatePresence>
 
-        {/* ── Footer contador ── */}
-        <m.div
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.8 }}
-          className="flex items-center justify-center gap-3 mt-12"
-        >
+        {}
+        <div style={style('up', { delay: 0.8 })} className="flex items-center justify-center gap-3 mt-12">
           <div className="h-px w-16 [background:var(--border-subtle)]" />
           <p className="text-sm [color:var(--text-muted)]">
             <span className="text-blue-400 font-bold">{filtered.length}</span>
@@ -210,15 +195,10 @@ export function ProjectsClient({
             )}
           </p>
           <div className="h-px w-16 [background:var(--border-subtle)]" />
-        </m.div>
+        </div>
 
         {viewAllHref && totalCount !== undefined && (
-          <m.div
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : {}}
-            transition={{ delay: 0.9 }}
-            className="flex justify-center mt-8"
-          >
+          <div style={style('up', { delay: 0.9 })} className="flex justify-center mt-8">
             <Link
               href={viewAllHref}
               className="px-6 py-3 rounded-xl text-sm font-semibold text-white
@@ -228,7 +208,7 @@ export function ProjectsClient({
             >
               Ver todos los proyectos ({totalCount}) →
             </Link>
-          </m.div>
+          </div>
         )}
       </div>
     </section>
