@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { auth } from '@/auth';
 import { Sidebar } from '@/components/admin/Sidebar';
 
+export const instant = false;
 
 export default async function AdminLayout({
   children,
