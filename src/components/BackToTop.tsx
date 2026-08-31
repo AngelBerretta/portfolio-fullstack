@@ -1,27 +1,21 @@
 "use client";
 
-import { m, AnimatePresence } from 'framer-motion';
 import { ArrowUp } from 'lucide-react';
 import { useScrollState } from '@/hooks/useScrollState';
 
 export default function BackToTop() {
-  const { showBackToTop } = useScrollState()
+  const { showBackToTop } = useScrollState();
 
   return (
-    <AnimatePresence>
-      {showBackToTop && (
-        <m.button
-          initial={{ opacity: 0, scale: 0.8, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.8, y: 20 }}
-          transition={{ duration: 0.3 }}
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-8 right-6 z-40 p-3 rounded-xl bg-indigo-500/90 backdrop-blur-sm text-white shadow-lg shadow-indigo-500/30 hover:bg-indigo-500 hover:scale-110 hover:shadow-indigo-500/50 transition-all duration-300 lg:hidden"
-          aria-label="Volver arriba"
-        >
-          <ArrowUp size={20} />
-        </m.button>
-      )}
-    </AnimatePresence>
+    <button
+      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      aria-label="Volver arriba"
+      aria-hidden={!showBackToTop}
+      tabIndex={showBackToTop ? 0 : -1}
+      data-visible={showBackToTop}
+      className="back-to-top-btn fixed bottom-8 right-6 z-40 p-3 rounded-xl bg-indigo-500/90 backdrop-blur-sm text-white shadow-lg shadow-indigo-500/30 hover:bg-indigo-500 hover:shadow-indigo-500/50 lg:hidden"
+    >
+      <ArrowUp size={20} />
+    </button>
   );
 }

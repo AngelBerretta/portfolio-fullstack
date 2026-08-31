@@ -1,6 +1,6 @@
 "use client";
 import { useActionState, useEffect, useRef, useState } from 'react';
-import { m } from 'framer-motion';
+import type { CSSProperties } from 'react';
 import { Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { sendContactMessage } from '@/actions/contact';
 
@@ -24,10 +24,14 @@ export function ContactForm({ isInView }: { isInView: boolean }) {
   const showError = !dismissed && state?.success === false;
 
   return (
-    <m.div
-      initial={{ opacity: 0, x: 30 }}
-      animate={isInView ? { opacity: 1, x: 0 } : {}}
-      transition={{ duration: 0.6, delay: 0.2 }}
+    <div
+      style={{
+        opacity: isInView ? 1 : 0,
+        transform: isInView ? 'translateX(0)' : 'translateX(30px)',
+        transitionProperty: 'opacity, transform',
+        transitionDuration: '0.6s',
+        transitionDelay: '0.2s',
+      } as CSSProperties}
       className="p-7 rounded-2xl border [background:var(--bg-card)] [border-color:var(--border-subtle)]"
     >
       <h3 className="font-bold text-lg mb-6 [color:var(--text-primary)]">Enviame un mensaje</h3>
@@ -128,6 +132,6 @@ export function ContactForm({ isInView }: { isInView: boolean }) {
           El mensaje llega directo a mi Gmail.
         </p>
       </form>
-    </m.div>
+    </div>
   );
 }

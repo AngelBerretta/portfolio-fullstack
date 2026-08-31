@@ -1,6 +1,5 @@
-// ContactInfo.tsx — stats integrados en el card de disponibilidad, horario compacto
 "use client";
-import { m } from 'framer-motion';
+import type { CSSProperties } from 'react';
 import { Mail, Phone, MapPin, Clock } from 'lucide-react';
 import { GitHubIcon, LinkedInIcon } from './icons';
 
@@ -51,17 +50,23 @@ const schedule = [
   { days: 'Sáb — Dom', hours: '10:00 — 18:00' },
 ];
 
+function revealStyle(isInView: boolean, delay = 0): CSSProperties {
+  return {
+    opacity: isInView ? 1 : 0,
+    transform: isInView ? 'translateX(0)' : 'translateX(-20px)',
+    transitionProperty: 'opacity, transform',
+    transitionDuration: '0.6s',
+    transitionDelay: `${delay}s`,
+    transitionTimingFunction: 'ease',
+  };
+}
+
 export function ContactInfo({ isInView }: { isInView: boolean }) {
   return (
-    <m.div
-      initial={{ opacity: 0, x: -30 }}
-      animate={isInView ? { opacity: 1, x: 0 } : {}}
-      transition={{ duration: 0.6, delay: 0.1 }}
-      className="space-y-4"
-    >
-      {/* ── Availability card + stats integrados ── */}
+    <div style={revealStyle(isInView, 0.1)} className="space-y-4">
+      {}
       <div className="p-6 rounded-2xl bg-gradient-to-br from-blue-500/10 to-violet-500/10 border border-blue-500/25">
-        {/* Header del card */}
+        {}
         <div className="flex items-center gap-3 mb-2">
           <span className="w-3 h-3 rounded-full bg-green-400 animate-pulse" />
           <span className="text-green-400 font-semibold text-sm">Disponible ahora</span>
@@ -73,7 +78,7 @@ export function ContactInfo({ isInView }: { isInView: boolean }) {
           Full Time o por proyecto · Remoto o presencial en Buenos Aires.
         </p>
 
-        {/* Stats dentro del card ── no ocupa bloque extra */}
+        {}
         <div className="grid grid-cols-3 gap-3 pt-4 border-t [border-color:rgba(59,130,246,0.2)]">
           {stats.map((stat) => (
             <div key={stat.label} className="text-center">
@@ -84,14 +89,12 @@ export function ContactInfo({ isInView }: { isInView: boolean }) {
         </div>
       </div>
 
-      {/* ── Contact details ── */}
+      {}
       <div className="space-y-2">
         {contactInfo.map((item, i) => (
-          <m.div
+          <div
             key={item.label}
-            initial={{ opacity: 0, x: -20 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ delay: 0.2 + i * 0.1 }}
+            style={revealStyle(isInView, 0.2 + i * 0.1)}
             className="flex items-center gap-4 p-3.5 rounded-xl border hover:border-blue-500/30 transition-all [background:var(--bg-card)] [border-color:var(--border-subtle)]"
           >
             <div className="p-2 rounded-lg bg-white/5 shrink-0">{item.icon}</div>
@@ -108,19 +111,19 @@ export function ContactInfo({ isInView }: { isInView: boolean }) {
                 <p className="text-sm font-medium [color:var(--text-secondary)]">{item.value}</p>
               )}
             </div>
-          </m.div>
+          </div>
         ))}
       </div>
 
-      {/* ── Socials + Horario en la misma fila ── */}
+      {}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 
-        {/* Redes */}
+        {}
         <div className="p-4 rounded-xl border [background:var(--bg-card)] [border-color:var(--border-subtle)]">
           <p className="text-xs font-semibold uppercase tracking-widest mb-3 [color:var(--text-muted)]">
             Redes
           </p>
-          {/* ── gap-3 y w-full para que cada botón ocupe su parte ── */}
+          {}
           <div className="flex gap-3">
             {socialLinks.map((s) => (
               <a
@@ -139,7 +142,7 @@ export function ContactInfo({ isInView }: { isInView: boolean }) {
           </div>
         </div>
 
-        {/* Horario */}
+        {}
         <div className="p-4 rounded-xl border [background:var(--bg-card)] [border-color:var(--border-subtle)]">
           <div className="flex items-center gap-1.5 mb-3">
             <Clock size={13} className="text-blue-400 shrink-0" />
@@ -162,6 +165,6 @@ export function ContactInfo({ isInView }: { isInView: boolean }) {
         </div>
 
       </div>
-    </m.div>
+    </div>
   );
 }

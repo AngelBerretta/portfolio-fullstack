@@ -462,6 +462,20 @@ body {
   ***REMOVED***skills .blur-3xl     { filter: blur(24px); opacity: 0.6; }
 }
 
+.back-to-top-btn {
+  opacity: 0;
+  transform: translateY(20px) scale(0.8);
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.3s, background-color 0.3s, box-shadow 0.3s;
+}
+.back-to-top-btn[data-visible="true"] {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+.back-to-top-btn:hover { transform: scale(1.1); }
+.back-to-top-btn[data-visible="true"]:hover { transform: translateY(0) scale(1.1); }
+
 /* ══════════════════════════════════════════════════════════════════
    PREFERS-REDUCED-MOTION — bloque único y completo
 ══════════════════════════════════════════════════════════════════ */
