@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag, unstable_cache } from 'next/cache';
 import { prisma } from '@/lib/db';
 import { requireAuth } from '@/lib/require-auth';
 import { ProjectSchema, ReorderSchema } from '@/lib/validations';
@@ -52,6 +52,7 @@ function revalidateAll() {
   revalidatePath('/');
   revalidatePath('/proyectos');
   revalidatePath('/admin/projects');
+  revalidateTag('projects', '');
 }
 
 // ─── CREATE ──────────────────────────────────────────────────────────────────
@@ -219,12 +220,18 @@ export async function reorderProjects(
  * el Full Route Cache de Next.js vía `export const revalidate` en cada
  * página, que se invalida con revalidatePath() en cada mutación de arriba.
  */
-export async function getAllProjects() {
+async function _getAllProjects() {
   return prisma.project.findMany({
     include: { tags: true },
     orderBy: { order: 'asc' },
   });
 }
+
+export const getAllProjects = unstable_cache(
+  _getAllProjects,
+  ['all-projects'],
+  { tags: ['projects'] }
+);
 
 // getProjectById no lo cacheamos — solo se usa en el admin
 // donde siempre queremos datos frescos

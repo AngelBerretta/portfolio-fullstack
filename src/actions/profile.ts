@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag, unstable_cache } from 'next/cache';
 import { prisma } from '@/lib/db';
 import { requireAuth } from '@/lib/require-auth';
 import { ProfileSchema } from '@/lib/validations';
@@ -48,6 +48,7 @@ export async function updateProfile(
 
     revalidatePath('/');
     revalidatePath('/admin/profile');
+    revalidateTag('profile', '');
     return ok();
   } catch (error) {
     if (error instanceof Error && error.message === 'UNAUTHORIZED') {
@@ -60,6 +61,12 @@ export async function updateProfile(
 
 // ─── READ ────────────────────────────────────────────────────────────────────
 
-export async function getProfile(): Promise<Profile | null> {
+async function _getProfile(): Promise<Profile | null> {
   return prisma.profile.findFirst();
 }
+
+export const getProfile = unstable_cache(
+  _getProfile,
+  ['profile'],
+  { tags: ['profile'] }
+);
