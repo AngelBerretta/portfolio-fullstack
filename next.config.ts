@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Activa Partial Prerendering (PPR) por defecto mediante Cache Components en Next.js 16
+  cacheComponents: true,
+
   // Configuración de imágenes para next/image
   images: {
     remotePatterns: [

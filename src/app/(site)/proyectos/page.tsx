@@ -5,8 +5,6 @@ import { ProjectsClient } from '@/components/ProjectsClient';
 import { PROJECT_FILTER_TABS } from '@/lib/constants';
 import { mapProjectsToCardData, splitLiveUpcoming } from '@/components/projects/mapProjects';
 
-export const revalidate = 3600;
-
 export const metadata = {
   title: 'Proyectos — Angel Berretta',
   description: 'Todos los proyectos full stack, frontend y landing pages desarrollados por Angel Berretta.',

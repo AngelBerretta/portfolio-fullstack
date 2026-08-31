@@ -6,7 +6,6 @@ import Projects from "@/components/Projects";
 
 const Contact = dynamic(() => import("@/components/Contact"), { ssr: true });
 
-export const revalidate = 3600;
 
 export default function Home() {
   return (
