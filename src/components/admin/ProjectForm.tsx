@@ -97,7 +97,7 @@ export function ProjectForm<T = undefined>({
               setSlug(e.target.value);
             }}
             required
-            pattern="[a-z0-9-]+"
+            pattern="[a-z0-9\-]+"
             className={inputClass}
             placeholder="fire-market"
           />
